@@ -1,79 +1,79 @@
 /** @type {import("prettier").Config} */
 const config = {
-  // Satır sonuna noktalı virgül koy: const x = 1;
-  // false yaparsan: const x = 1
+  // Add semicolons at the end of statements: const x = 1;
+  // If false: const x = 1
   semi: true,
 
-  // Çift tırnak kullan: "hello"
-  // true yaparsan tek tırnak: 'hello'
+  // Use double quotes: "hello"
+  // If true, uses single quotes: 'hello'
   singleQuote: false,
 
-  // Satır genişliği limiti — bu sınırı aşan satırlar kırılır
-  // 80: klasik terminal genişliği
-  // 100: modern ekranlar için rahat
-  // 120: geniş ekranlarda
+  // Line width limit — lines exceeding this will be wrapped
+  // 80: classic terminal width
+  // 100: comfortable for modern screens
+  // 120: for wide screens
   printWidth: 100,
 
-  // Girinti genişliği — 2 space standart
+  // Indentation width — 2 spaces is standard
   tabWidth: 2,
 
-  // Tab mı space mi? false = space kullan
+  // Tabs or spaces? false = use spaces
   useTabs: false,
 
-  // Objelerde süslü parantez içinde boşluk: { foo: bar } vs {foo: bar}
-  // true: { foo: bar } — daha okunabilir
+  // Spaces inside curly braces in objects: { foo: bar } vs {foo: bar}
+  // true: { foo: bar } — more readable
   bracketSpacing: true,
 
-  // Son elemandan sonra virgül koy
-  // "all": her yerde (function parametreleri dahil)
-  // "es5": sadece ES5'te geçerli yerlerde (array, object)
-  // "none": hiçbir yerde
+  // Add trailing comma after the last element
+  // "all": everywhere (including function parameters)
+  // "es5": only where valid in ES5 (arrays, objects)
+  // "none": nowhere
   trailingComma: "all",
 
-  // Arrow function tek parametre olsa bile parantez: (x) => x
-  // "always": (x) => x — TypeScript type annotation için tutarlı
-  // "avoid": x => x — daha kısa ama type eklenince parantez gerekir
+  // Always add parentheses around arrow function parameters: (x) => x
+  // "always": (x) => x — consistent with TypeScript type annotations
+  // "avoid": x => x — shorter but requires parentheses when adding types
   arrowParens: "always",
 
-  // JSX'te çift tırnak kullan: <Foo bar="baz" />
-  // false: çift tırnak (HTML convention)
-  // true: tek tırnak
+  // Use double quotes in JSX: <Foo bar="baz" />
+  // false: double quotes (HTML convention)
+  // true: single quotes
   jsxSingleQuote: false,
 
-  // HTML/JSX/Vue template'te > karakteri nereye gelsin
-  // false: son attribute ile aynı satırda
+  // Where should the > character go in HTML/JSX/Vue templates
+  // false: on the same line as the last attribute
   //   <button
   //     className="foo"
   //     onClick={bar}>
   //
-  // true: yeni satırda
+  // true: on a new line
   //   <button
   //     className="foo"
   //     onClick={bar}
   //   >
   bracketSameLine: false,
 
-  // Satır sonu karakteri
-  // "lf": Unix/Mac (\n) — Git ve modern sistemler için standart
+  // End of line character
+  // "lf": Unix/Mac (\n) — standard for Git and modern systems
   // "crlf": Windows (\r\n)
-  // "auto": mevcut dosyanın formatını koru
+  // "auto": preserve the existing format of the file
   endOfLine: "lf",
 
-  // Markdown'da satır kırma davranışı
-  // "preserve": olduğu gibi bırak
-  // "always": her zaman kır
-  // "never": hiç kırma
+  // Line wrapping behavior in Markdown
+  // "preserve": leave as-is
+  // "always": always wrap
+  // "never": never wrap
   proseWrap: "preserve",
 
-  // HTML whitespace hassasiyeti
-  // "css": CSS display property'ye göre karar ver (varsayılan)
-  // "strict": tüm whitespace'ler anlamlı
-  // "ignore": whitespace'leri yoksay
+  // HTML whitespace sensitivity
+  // "css": decide based on CSS display property (default)
+  // "strict": all whitespace is significant
+  // "ignore": ignore whitespace
   htmlWhitespaceSensitivity: "css",
 
-  // Her HTML attribute'u kendi satırına koy
-  // false: Prettier kendi kararını verir (printWidth'e göre)
-  // true: her zaman tek satırda bir attribute
+  // Put each HTML attribute on its own line
+  // false: Prettier decides (based on printWidth)
+  // true: always one attribute per line
   singleAttributePerLine: false,
 };
 

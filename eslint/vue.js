@@ -23,86 +23,86 @@ const config = [
     rules: {
 
       // ================================================================
-      // ESSENTIAL — Hata önleme (Priority A)
-      // Bu kurallar olmadan Vue uygulaması düzgün çalışmaz
+      // ESSENTIAL — Error prevention (Priority A)
+      // Without these rules, the Vue application won't work correctly
       // ================================================================
 
-      // Component ismi en az iki kelime olmalı: MyButton doğru, Button riskli (HTML tag çakışması)
+      // Component names must be at least two words: MyButton correct, Button risky (HTML tag conflict)
       "vue/multi-word-component-names": "warn",
 
-      // v-for veya scope içinde tanımlanan ama kullanılmayan değişkenleri yakalar
+      // Catch unused variables defined in v-for or scope
       "vue/no-unused-vars": "warn",
 
-      // Kayıtlı ama template'te kullanılmayan component'leri yakalar
+      // Catch registered but unused components in the template
       "vue/no-unused-components": "warn",
 
-      // Computed property içinde async kullanımını yasaklar — computed senkron olmalı
+      // Disallow async usage inside computed properties — computed must be synchronous
       "vue/no-async-in-computed-properties": "error",
 
-      // data() içinde computed property'ye erişimi yasaklar — henüz hazır değil
+      // Disallow accessing computed properties inside data() — not ready yet
       "vue/no-computed-properties-in-data": "error",
 
-      // Aynı field adını birden fazla yerde tanımlamayı yasaklar (data, computed, methods)
+      // Disallow defining the same field name in multiple places (data, computed, methods)
       "vue/no-dupe-keys": "error",
 
-      // v-if / v-else-if zincirinde aynı koşulun tekrarını yasaklar
+      // Disallow duplicate conditions in v-if / v-else-if chains
       "vue/no-dupe-v-else-if": "error",
 
-      // Aynı attribute'u iki kez yazmayı yasaklar
+      // Disallow duplicate attributes on the same element
       "vue/no-duplicate-attributes": "error",
 
-      // <script setup> içinde export kullanımını yasaklar
+      // Disallow export usage inside <script setup>
       "vue/no-export-in-script-setup": "error",
 
-      // Props'ları doğrudan mutate etmeyi yasaklar — tek yönlü veri akışı
+      // Disallow directly mutating props — one-way data flow
       "vue/no-mutating-props": "error",
 
-      // ref() değerini doğrudan operatör ile kullanmayı yakalar — .value unutulmuş
+      // Catch using ref() values directly with operators — .value may be forgotten
       "vue/no-ref-as-operand": "error",
 
-      // HTML tag isimleriyle çakışan component isimlerini yasaklar
+      // Disallow component names that conflict with HTML tag names
       "vue/no-reserved-component-names": "error",
 
-      // Ayrılmış anahtar kelimeleri prop/data/computed key olarak kullanmayı yasaklar
+      // Disallow using reserved keywords as prop/data/computed keys
       "vue/no-reserved-keys": "error",
 
-      // Computed property içinde yan etkiyi yasaklar — computed saf (pure) olmalı
+      // Disallow side effects in computed properties — computed must be pure
       "vue/no-side-effects-in-computed-properties": "error",
 
-      // <template> üzerinde key attribute yasaklar
+      // Disallow key attribute on <template>
       "vue/no-template-key": "error",
 
-      // <textarea> içinde mustache {{ }} kullanımını yasaklar — v-model kullan
+      // Disallow mustache {{ }} inside <textarea> — use v-model instead
       "vue/no-textarea-mustache": "error",
 
-      // Computed property'yi method gibi çağırmayı yasaklar: computed() yerine computed
+      // Disallow calling computed properties like methods: use computed, not computed()
       "vue/no-use-computed-property-like-method": "error",
 
-      // Aynı element'te v-if ve v-for birlikte kullanımını yasaklar — v-for her zaman önce çalışır
+      // Disallow v-if and v-for on the same element — v-for always runs first
       "vue/no-use-v-if-with-v-for": "error",
 
-      // <component> tag'inde v-bind:is (veya :is) zorunlu
+      // Require v-bind:is (or :is) on <component> tags
       "vue/require-component-is": "error",
 
-      // render() fonksiyonunda return zorunlu
+      // Require return in render() function
       "vue/require-render-return": "error",
 
-      // v-for direktifinde :key zorunlu — Vue reconciliation için kritik
+      // Require :key on v-for directives — critical for Vue reconciliation
       "vue/require-v-for-key": "error",
 
-      // Prop default değerlerinin geçerli olmasını zorlar (type ile uyumlu)
+      // Enforce valid default values for props (compatible with type)
       "vue/require-valid-default-prop": "error",
 
-      // Computed property'de return zorunlu
+      // Require return in computed properties
       "vue/return-in-computed-property": "error",
 
-      // Emit validator'da return zorunlu
+      // Require return in emit validators
       "vue/return-in-emits-validator": "error",
 
-      // v-on.exact modifierı ile kesin tuş eşleştirmesi önerir
+      // Suggest v-on.exact modifier for precise key matching
       "vue/use-v-on-exact": "warn",
 
-      // v-bind/v-if/v-for/v-model/v-on/v-slot direktiflerinin doğru syntax'ını zorlar
+      // Enforce correct syntax for v-bind/v-if/v-for/v-model/v-on/v-slot directives
       "vue/valid-v-bind": "error",
       "vue/valid-v-if": "error",
       "vue/valid-v-else": "error",
@@ -118,131 +118,131 @@ const config = [
       "vue/valid-v-pre": "error",
       "vue/valid-v-cloak": "error",
 
-      // defineEmits/defineProps/defineOptions macro'larının doğru kullanımını zorlar
+      // Enforce correct usage of defineEmits/defineProps/defineOptions macros
       "vue/valid-define-emits": "error",
       "vue/valid-define-props": "error",
       "vue/valid-define-options": "error",
 
-      // Template kök yapısının geçerli olmasını zorlar
+      // Enforce valid template root structure
       "vue/valid-template-root": "error",
 
-      // nextTick() doğru kullanımını zorlar
+      // Enforce correct usage of nextTick()
       "vue/valid-next-tick": "error",
 
 
       // ================================================================
-      // VUE 3 ESSENTIAL — Vue 3'e özgü zorunlu kurallar
-      // Vue 2'den 3'e geçişte deprecated API kullanımını yakalar
+      // VUE 3 ESSENTIAL — Vue 3-specific required rules
+      // Catches deprecated API usage during Vue 2 to 3 migration
       // ================================================================
 
-      // data artık fonksiyon olmalı, obje değil: data() { return {} }
+      // data must now be a function, not an object: data() { return {} }
       "vue/no-deprecated-data-object-declaration": "error",
 
-      // $delete ve $set artık Vue 3'te yok — Proxy reactivity bunu halleder
+      // $delete and $set are removed in Vue 3 — Proxy reactivity handles this
       "vue/no-deprecated-delete-set": "error",
 
-      // destroyed/beforeDestroy yerine unmounted/beforeUnmount kullan
+      // Use unmounted/beforeUnmount instead of destroyed/beforeDestroy
       "vue/no-deprecated-destroyed-lifecycle": "error",
 
-      // $listeners Vue 3'te kaldırıldı — attrs'a dahil edildi
+      // $listeners is removed in Vue 3 — merged into attrs
       "vue/no-deprecated-dollar-listeners-api": "error",
 
-      // $scopedSlots yerine $slots kullan
+      // Use $slots instead of $scopedSlots
       "vue/no-deprecated-dollar-scopedslots-api": "error",
 
-      // $on/$off/$once (events API) Vue 3'te kaldırıldı — mitt veya emitter kullan
+      // $on/$off/$once (events API) removed in Vue 3 — use mitt or an emitter library
       "vue/no-deprecated-events-api": "error",
 
-      // Filters ({{ msg | capitalize }}) Vue 3'te kaldırıldı — computed veya method kullan
+      // Filters ({{ msg | capitalize }}) removed in Vue 3 — use computed or methods
       "vue/no-deprecated-filter": "error",
 
-      // <template functional> Vue 3'te kaldırıldı
+      // <template functional> removed in Vue 3
       "vue/no-deprecated-functional-template": "error",
 
-      // HTML element'lerde is attribute kullanımı değişti
+      // is attribute usage on HTML elements has changed
       "vue/no-deprecated-html-element-is": "error",
 
-      // .sync modifier yerine v-model:propName kullan
+      // Use v-model:propName instead of .sync modifier
       "vue/no-deprecated-v-bind-sync": "error",
 
-      // .native modifier Vue 3'te kaldırıldı — emits ile yönet
+      // .native modifier removed in Vue 3 — manage with emits
       "vue/no-deprecated-v-on-native-modifier": "error",
 
-      // @vue/* yerine vue'dan import et: import { ref } from 'vue'
+      // Import from vue instead of @vue/*: import { ref } from 'vue'
       "vue/prefer-import-from-vue": "error",
 
-      // $slots artık fonksiyon olarak kullanılmalı: $slots.default()
+      // $slots must now be used as functions: $slots.default()
       "vue/require-slots-as-functions": "error",
 
-      // <transition> içinde v-show veya v-if zorunlu — yoksa animasyon çalışmaz
+      // Require v-show or v-if inside <transition> — otherwise animation won't work
       "vue/require-toggle-inside-transition": "error",
 
-      // await sonrasında lifecycle hook veya watch kaydetmeyi yasaklar — kaybolabilir
+      // Disallow registering lifecycle hooks or watchers after await — they may be lost
       "vue/no-lifecycle-after-await": "error",
       "vue/no-watch-after-await": "error",
 
 
       // ================================================================
-      // STRONGLY RECOMMENDED — Okunabilirlik (Priority B)
+      // STRONGLY RECOMMENDED — Readability (Priority B)
       // ================================================================
 
-      // Custom component prop'larında kebab-case zorunlu: <MyComp my-prop="x" />
+      // Enforce kebab-case for custom component props: <MyComp my-prop="x" />
       "vue/attribute-hyphenation": "warn",
 
-      // Component tanım ismi PascalCase veya kebab-case olmalı
+      // Component definition name must be PascalCase or kebab-case
       "vue/component-definition-name-casing": ["warn", "PascalCase"],
 
-      // Template'te scope'u gölgeleyen değişken isimlerini uyarır
+      // Warn about variable names in templates that shadow outer scope
       "vue/no-template-shadow": "warn",
 
-      // Her component kendi dosyasında olmalı — birden fazla component aynı .vue'da yasak
+      // Each component should be in its own file — no multiple components in the same .vue file
       "vue/one-component-per-file": "warn",
 
-      // Prop isimleri camelCase olmalı
+      // Prop names should be camelCase
       "vue/prop-name-casing": ["warn", "camelCase"],
 
-      // Prop type tanımı zorunlu: props: { foo: String } doğru, props: ['foo'] yetersiz
+      // Require prop type definitions: props: { foo: String } correct, props: ['foo'] insufficient
       "vue/require-prop-types": "warn",
 
-      // Emits seçeneğinde tüm emit edilen event'ler listelensin
+      // All emitted events should be listed in the emits option
       "vue/require-explicit-emits": "warn",
 
-      // v-bind kısa yazımı: :foo doğru, v-bind:foo gereksiz uzun
+      // Use v-bind shorthand: :foo correct, v-bind:foo unnecessarily verbose
       "vue/v-bind-style": ["warn", "shorthand"],
 
-      // v-on kısa yazımı: @click doğru, v-on:click gereksiz uzun
+      // Use v-on shorthand: @click correct, v-on:click unnecessarily verbose
       "vue/v-on-style": ["warn", "shorthand"],
 
-      // v-slot kısa yazımı: #default doğru, v-slot:default gereksiz uzun
+      // Use v-slot shorthand: #default correct, v-slot:default unnecessarily verbose
       "vue/v-slot-style": ["warn", "shorthand"],
 
-      // Custom event isimleri kebab-case olmalı: @my-event doğru
+      // Custom event names should be kebab-case: @my-event correct
       "vue/v-on-event-hyphenation": ["warn", "always"],
 
 
       // ================================================================
-      // RECOMMENDED — İyi pratikler (Priority C)
+      // RECOMMENDED — Best practices (Priority C)
       // ================================================================
 
-      // Component attribute'larının sırasını zorlar (tutarlılık)
+      // Enforce attribute ordering on components (consistency)
       "vue/attributes-order": "warn",
 
-      // SFC blok sırası: <script> → <template> → <style>
+      // SFC block order: <script> → <template> → <style>
       "vue/block-order": ["warn", { order: ["script", "template", "style"] }],
 
-      // Tek child'ı olan gereksiz <template> tag'ini yakalar
+      // Catch unnecessary <template> tags with a single child
       "vue/no-lone-template": "warn",
 
-      // required: true olan prop'a default vererek çelişkiyi önler
+      // Prevent conflicting required: true with a default value on props
       "vue/no-required-prop-with-default": "warn",
 
-      // v-html kullanımını uyarır — XSS riski, innerHTML olarak render eder
+      // Warn about v-html usage — XSS risk, renders as innerHTML
       "vue/no-v-html": "warn",
 
-      // Component option'larının sırasını zorlar (name, props, data, computed, methods vb.)
+      // Enforce component options ordering (name, props, data, computed, methods, etc.)
       "vue/order-in-components": "warn",
 
-      // Template içinde this kullanımını yasaklar: {{ this.foo }} yerine {{ foo }}
+      // Disallow this in templates: use {{ foo }} instead of {{ this.foo }}
       "vue/this-in-template": ["warn", "never"],
 
 
@@ -250,61 +250,61 @@ const config = [
       // COMPOSITION API — Modern Vue 3 patterns
       // ================================================================
 
-      // Sadece script-setup ve composition API'ye izin ver — options API yasak
+      // Only allow script-setup and composition API — options API is forbidden
       "vue/component-api-style": ["error", ["script-setup", "composition"]],
 
-      // defineEmits type-based syntax: defineEmits<{ click: [e: MouseEvent] }>()
+      // Use type-based syntax for defineEmits: defineEmits<{ click: [e: MouseEvent] }>()
       "vue/define-emits-declaration": ["warn", "type-based"],
 
-      // defineProps type-based syntax: defineProps<{ msg: string }>()
+      // Use type-based syntax for defineProps: defineProps<{ msg: string }>()
       "vue/define-props-declaration": ["warn", "type-based"],
 
-      // Compiler macro'ların sırası: defineProps → defineEmits → defineSlots
+      // Enforce compiler macro ordering: defineProps → defineEmits → defineSlots
       "vue/define-macros-order": ["warn", {
         order: ["defineProps", "defineEmits", "defineSlots"],
       }],
 
-      // ref/reactive değerin reactivity kaybını yakalar (destructure ile)
+      // Catch reactivity loss when destructuring ref/reactive values
       "vue/no-ref-object-reactivity-loss": "warn",
 
-      // Props destructure sırasında reactivity kaybını yakalar
+      // Catch reactivity loss when destructuring props
       "vue/no-setup-props-reactivity-loss": "warn",
 
 
       // ================================================================
-      // TEMPLATE KALİTE — Ekstra template kuralları
+      // TEMPLATE QUALITY — Extra template rules
       // ================================================================
 
-      // Boş <template>, <script>, <style> bloklarını yasaklar
+      // Disallow empty <template>, <script>, <style> blocks
       "vue/no-empty-component-block": "warn",
 
-      // Gereksiz mustache: {{ "hello" }} yerine düz "hello" yaz
+      // Catch unnecessary mustache: {{ "hello" }} should just be "hello"
       "vue/no-useless-mustaches": "warn",
 
-      // Gereksiz v-bind: :foo="'bar'" yerine foo="bar" yaz
+      // Catch unnecessary v-bind: :foo="'bar'" should just be foo="bar"
       "vue/no-useless-v-bind": "warn",
 
-      // Component options'ta potansiyel typo yakalar: methos yerine methods
+      // Catch potential typos in component options: methos instead of methods
       "vue/no-potential-component-option-typo": "warn",
 
-      // Template'te tanımsız component kullanımını yakalar
+      // Catch undefined components used in templates
       "vue/no-undef-components": ["warn", {
         ignorePatterns: ["router-link", "router-view"],
       }],
 
-      // Template'te tanımsız directive kullanımını yakalar
+      // Catch undefined directives used in templates
       "vue/no-undef-directives": "warn",
 
-      // Kullanılmayan emit tanımlarını yakalar
+      // Catch unused emit declarations
       "vue/no-unused-emit-declarations": "warn",
 
-      // Kullanılmayan ref'leri yakalar
+      // Catch unused refs
       "vue/no-unused-refs": "warn",
 
-      // <button> elemanında type attribute zorunlu: "button", "submit", veya "reset"
+      // Require type attribute on <button> elements: "button", "submit", or "reset"
       "vue/html-button-has-type": "warn",
 
-      // Self-closing: <MyComp /> doğru, <MyComp></MyComp> gereksiz
+      // Self-closing: <MyComp /> correct, <MyComp></MyComp> unnecessary
       "vue/html-self-closing": ["warn", {
         html: { void: "always", normal: "never", component: "always" },
       }],

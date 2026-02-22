@@ -10,8 +10,8 @@ const config = [
       parserOptions: {
         ecmaVersion: "latest",
         sourceType: "module",
-        // Type-aware kurallar için gerekli (no-floating-promises, await-thenable vb.)
-        // Projenin tsconfig.json'ını otomatik bulur — TypeScript projelerinde standart
+        // Required for type-aware rules (no-floating-promises, await-thenable, etc.)
+        // Automatically finds the project's tsconfig.json — standard for TypeScript projects
         projectService: true,
       },
     },
@@ -21,250 +21,249 @@ const config = [
     rules: {
 
       // ================================================================
-      // OLASI PROBLEMLER — Bug'a doğrudan yol açabilecek kurallar
+      // POSSIBLE PROBLEMS — Rules that catch potential bugs
       // ================================================================
 
-      // map/filter/reduce gibi array metodlarında return zorunlu
+      // Require return in array method callbacks (map/filter/reduce, etc.)
       "array-callback-return": "error",
 
-      // for döngüsü içinde await kullanımını uyarır — Promise.all() tercih et
+      // Warn against await inside loops — prefer Promise.all()
       "no-await-in-loop": "warn",
 
-      // if (true), while (1) gibi her zaman aynı sonucu veren condition'lar
+      // Conditions that always evaluate to the same result: if (true), while (1)
       "no-constant-condition": "warn",
 
-      // constructor içinden değer return etmeyi yasaklar
+      // Disallow returning a value from a constructor
       "no-constructor-return": "error",
 
-      // debugger; satırlarını yakalar — commit'e kaçmasın
+      // Catch debugger; statements — prevent them from being committed
       "no-debugger": "error",
 
-      // Aynı modülü iki kez import etmeyi yasaklar
+      // Disallow importing the same module twice
       "no-duplicate-imports": "error",
 
-      // new Promise((resolve) => { return value }) — executor'dan return yasaklar
+      // Disallow returning from a Promise executor: new Promise((resolve) => { return value })
       "no-promise-executor-return": "error",
 
-      // a === a gibi kendisiyle karşılaştırmayı yakalar
+      // Catch self-comparisons like a === a
       "no-self-compare": "error",
 
-      // Normal string içinde ${foo} yazmayı yakalar — backtick unutulmuş olabilir
+      // Catch ${foo} in regular strings — backtick may have been forgotten
       "no-template-curly-in-string": "warn",
 
-      // return/throw/break'ten sonraki ulaşılamaz kodu yakalar
+      // Catch unreachable code after return/throw/break
       "no-unreachable": "error",
 
-      // async fonksiyonlarda race condition'a yol açan atamaları yakalar
+      // Warn about assignments that could cause race conditions in async functions
       "require-atomic-updates": "warn",
 
-      // NaN karşılaştırmasında isNaN() veya Number.isNaN() kullanımını zorlar
+      // Enforce isNaN() or Number.isNaN() for NaN comparisons
       "use-isnan": "error",
 
-      // typeof sonucunu geçerli bir string ile karşılaştırmayı zorlar ("string", "number" vb.)
+      // Enforce comparing typeof against valid strings ("string", "number", etc.)
       "valid-typeof": "error",
 
 
       // ================================================================
-      // KALİTE — İyi pratikler ve okunabilirlik
+      // QUALITY — Best practices and readability
       // ================================================================
 
-      // Arrow function body gereksizse kısa tut: x => x*2, { return } değil
+      // Keep arrow function bodies concise when possible: x => x*2, not { return x*2 }
       "arrow-body-style": ["warn", "as-needed"],
 
-      // camelCase isimlendirme zorunlu — obje property'leri hariç
+      // Enforce camelCase naming — except for object properties
       "camelcase": ["warn", { properties: "never" }],
 
-      // Fonksiyon içindeki dal sayısı (if/else/switch vb.) max 10
+      // Max number of branches (if/else/switch, etc.) per function: 10
       "complexity": ["warn", 10],
 
-      // if/else/for/while bloklarında süslü parantez zorunlu — tek satır olsa bile
+      // Require curly braces for if/else/for/while blocks — even for single statements
       "curly": ["error", "all"],
 
-      // switch'te default case zorunlu — beklenmedik değerler kapsansın
+      // Require default case in switch — handle unexpected values
       "default-case": "warn",
 
-      // switch'te default en son olmalı
+      // Default case should be last in switch
       "default-case-last": "error",
 
-      // == yerine === zorunlu — type coercion hatalarını önler
+      // Require === instead of == — prevents type coercion bugs
       "eqeqeq": ["error", "always"],
 
-      // İç içe blok derinliği max 4 — daha fazlası okunaksız
+      // Max nesting depth of 4 — deeper is hard to read
       "max-depth": ["warn", 4],
 
-      // alert(), confirm(), prompt() yasaklar — UI framework kullan
+      // Disallow alert(), confirm(), prompt() — use a UI framework instead
       "no-alert": "error",
 
-      // console.log vb. — production'a kaçmasın
+      // Warn on console.log, etc. — prevent leaking into production
       "no-console": "warn",
 
-      // return'den sonraki gereksiz else yasaklar — erken return pattern
+      // Disallow unnecessary else after return — use early return pattern
       "no-else-return": "warn",
 
-      // if (foo) {} gibi boş blokları yasaklar — en azından yorum olsun
+      // Disallow empty blocks like if (foo) {} — at least add a comment
       "no-empty": "warn",
 
-      // eval() yasaklar — güvenlik açığı ve performans sorunu
+      // Disallow eval() — security vulnerability and performance issue
       "no-eval": "error",
 
-      // Fonksiyon olmayan yerde .bind() kullanımını yasaklar
+      // Disallow unnecessary .bind() on non-functions
       "no-extra-bind": "warn",
 
-      // !!foo yerine doğrudan boolean kullan
+      // Use boolean directly instead of !!foo
       "no-extra-boolean-cast": "warn",
 
-      // İç içe ternary yasaklar: a ? b ? c : d : e — okunaksız
+      // Disallow nested ternaries: a ? b ? c : d : e — unreadable
       "no-nested-ternary": "warn",
 
-      // Fonksiyon parametresini yeniden atamayı uyarır — yan etki riski
+      // Warn against reassigning function parameters — risk of side effects
       "no-param-reassign": "warn",
 
-      // var kullanımını yasaklar — let/const kullan
+      // Disallow var — use let/const instead
       "no-var": "error",
 
-      // { foo: foo } yerine { foo } shorthand kullan
+      // Use shorthand: { foo } instead of { foo: foo }
       "object-shorthand": "warn",
 
-      // callback'lerde arrow function tercih et: .then(function(){}) yerine .then(() => {})
+      // Prefer arrow functions in callbacks: .then(() => {}) instead of .then(function(){})
       "prefer-arrow-callback": "warn",
 
-      // Değeri değiştirilmeyen değişkende const zorunlu
+      // Require const for variables that are never reassigned
       "prefer-const": "error",
 
-      // const { a } = obj — destructuring kullanımını teşvik eder (array'de opsiyonel)
+      // Encourage destructuring: const { a } = obj (optional for arrays)
       "prefer-destructuring": ["warn", { object: true, array: false }],
 
-      // "Hello " + name yerine `Hello ${name}` — template literal tercih et
+      // Prefer template literals: `Hello ${name}` instead of "Hello " + name
       "prefer-template": "warn",
 
 
       // ================================================================
-      // TS EXTENSION KURALLARI
-      // JS versiyonunu kapat, TS versiyonunu aç.
-      // TypeScript syntax'ını anlamayan base kuralların yerine geçer.
+      // TS EXTENSION RULES
+      // Disable JS version, enable TS version.
+      // These replace base rules that don't understand TypeScript syntax.
       // ================================================================
 
       // --- no-array-constructor ---
       "no-array-constructor": "off",
-      // new Array() yerine [] veya Array.from() kullan
+      // Use [] or Array.from() instead of new Array()
       "@typescript-eslint/no-array-constructor": "error",
 
       // --- dot-notation ---
       "dot-notation": "off",
-      // obj["foo"] yerine obj.foo kullan
+      // Use obj.foo instead of obj["foo"]
       "@typescript-eslint/dot-notation": "error",
 
       // --- no-implied-eval ---
       "no-implied-eval": "off",
-      // setTimeout("code string") gibi string'i kod olarak çalıştırmayı yasaklar
+      // Disallow executing string as code: setTimeout("code string")
       "@typescript-eslint/no-implied-eval": "error",
 
       // --- no-shadow ---
       "no-shadow": "off",
-      // Dış scope'daki değişkeni gölgeleyen tanımları uyarır
+      // Warn about variable declarations that shadow outer scope variables
       "@typescript-eslint/no-shadow": "warn",
 
       // --- no-unused-vars ---
       "no-unused-vars": "off",
-      // Kullanılmayan değişkenleri uyarır — _ prefix ile başlayanlar muaf
+      // Warn about unused variables — variables prefixed with _ are exempt
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
 
       // --- no-use-before-define ---
       "no-use-before-define": "off",
-      // Tanımlanmadan önce kullanılan değişken/class'ları yakalar (fonksiyonlar muaf — hoisting)
+      // Catch usage of variables/classes before they are defined (functions are exempt — hoisting)
       "@typescript-eslint/no-use-before-define": ["error", { functions: false }],
 
       // --- no-useless-constructor ---
       "no-useless-constructor": "off",
-      // Boş veya sadece super() çağıran gereksiz constructor'ı yasaklar
+      // Disallow empty constructors or constructors that only call super()
       "@typescript-eslint/no-useless-constructor": "warn",
 
       // --- max-params ---
       "max-params": "off",
-      // Fonksiyon parametre sayısı max 4 — fazlası için object al
+      // Max 4 function parameters — use an object for more
       "@typescript-eslint/max-params": ["warn", { max: 4 }],
 
       // --- require-await ---
       "require-await": "off",
-      // await içermeyen async fonksiyonları uyarır — async gereksizse kaldır
+      // Warn about async functions that contain no await — remove async if unnecessary
       "@typescript-eslint/require-await": "warn",
 
 
       // ================================================================
-      // TYPESCRIPT — Sadece TS'e özgü kurallar
-      // ⚠ işaretli kurallar tip bilgisi gerektirir (projectService: true)
+      // TYPESCRIPT — TypeScript-specific rules
+      // Rules marked with ⚠ require type information (projectService: true)
       // ================================================================
 
-      // any tipini uyarır — unknown veya spesifik tip kullan
+      // Warn against the any type — use unknown or a specific type instead
       "@typescript-eslint/no-explicit-any": "warn",
 
-      // import type { Foo } şeklinde type import'larını zorlar
+      // Enforce type imports: import type { Foo }
       "@typescript-eslint/consistent-type-imports": "error",
 
-      // export type { Foo } şeklinde type export'larını zorlar
+      // Enforce type exports: export type { Foo }
       "@typescript-eslint/consistent-type-exports": "error",
 
-      // T[] vs Array<T> tutarlılığı — T[] tercih et
+      // T[] vs Array<T> consistency — prefer T[]
       "@typescript-eslint/array-type": ["warn", { default: "array" }],
 
-      // ⚠ Thenable olmayan bir şeyi await yasaklar
+      // ⚠ Disallow awaiting a non-Thenable value
       "@typescript-eslint/await-thenable": "error",
 
-      // @ts-ignore yerine @ts-expect-error kullan ve açıklama yaz
+      // Use @ts-expect-error with a description instead of @ts-ignore
       "@typescript-eslint/ban-ts-comment": ["warn", {
         "ts-ignore": "allow-with-description",
         "ts-expect-error": "allow-with-description",
       }],
 
-      // interface vs type tutarlılığı — interface tercih et
+      // interface vs type consistency — prefer interface
       "@typescript-eslint/consistent-type-definitions": ["warn", "interface"],
 
-      // @deprecated işaretli API kullanımını uyarır
-      // ⚠
+      // ⚠ Warn about usage of @deprecated APIs
       "@typescript-eslint/no-deprecated": "warn",
 
-      // Boş {} tipini yasaklar — unknown veya object kullan
+      // Disallow empty {} type — use unknown or object instead
       "@typescript-eslint/no-empty-object-type": "warn",
 
-      // ⚠ await edilmeyen (floating) Promise'ları yakalar — sessiz bug kaynağı
+      // ⚠ Catch unhandled (floating) Promises — a silent source of bugs
       "@typescript-eslint/no-floating-promises": "error",
 
-      // ⚠ Array üzerinde for-in döngüsünü yasaklar — for-of veya forEach kullan
+      // ⚠ Disallow for-in on arrays — use for-of or forEach instead
       "@typescript-eslint/no-for-in-array": "error",
 
-      // ⚠ if (promise) veya promise && foo gibi yanlış Promise kullanımlarını yakalar
+      // ⚠ Catch incorrect Promise usage: if (promise) or promise && foo
       "@typescript-eslint/no-misused-promises": "error",
 
-      // ! non-null assertion operatörünü uyarır — güvenli kontrol tercih et
+      // Warn against the ! non-null assertion operator — prefer safe checks
       "@typescript-eslint/no-non-null-assertion": "warn",
 
-      // require() yerine import kullanımını zorlar
-      // Not: eğer proje CommonJS ise bu kuralı projeye özgü olarak kapat
+      // Enforce import instead of require()
+      // Note: disable this rule per-project if the project uses CommonJS
       "@typescript-eslint/no-require-imports": "error",
 
-      // ⚠ any tipli değeri argument olarak geçmeyi uyarır
+      // ⚠ Warn about passing any-typed values as arguments
       "@typescript-eslint/no-unsafe-argument": "warn",
 
-      // ⚠ any tipli değer atamayı uyarır
+      // ⚠ Warn about assigning any-typed values
       "@typescript-eslint/no-unsafe-assignment": "warn",
 
-      // ⚠ any tipli değer return etmeyi uyarır
+      // ⚠ Warn about returning any-typed values
       "@typescript-eslint/no-unsafe-return": "warn",
 
-      // Error olmayan bir şeyi throw yasaklar: throw "string" yerine throw new Error()
+      // Disallow throwing non-Error values: throw new Error() instead of throw "string"
       "@typescript-eslint/only-throw-error": "error",
 
-      // ⚠ || yerine ?? (nullish coalescing) tercih et
-      // ?? sadece null/undefined'ı yakalar, || ayrıca 0 ve "" de yakalar
+      // ⚠ Prefer ?? (nullish coalescing) over ||
+      // ?? only catches null/undefined, while || also catches 0 and ""
       "@typescript-eslint/prefer-nullish-coalescing": "warn",
 
-      // a && a.b yerine a?.b optional chaining kullan
+      // Use optional chaining: a?.b instead of a && a.b
       "@typescript-eslint/prefer-optional-chain": "warn",
 
-      // ⚠ Hiç değiştirilmeyen private field'lara readonly önerir
+      // ⚠ Suggest readonly for private fields that are never modified
       "@typescript-eslint/prefer-readonly": "warn",
 
-      // ⚠ Union type'ta tüm case'leri kapsamayan switch'i uyarır
+      // ⚠ Warn about switch statements that don't cover all union type cases
       "@typescript-eslint/switch-exhaustiveness-check": "warn",
     },
   },

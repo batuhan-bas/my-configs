@@ -8,7 +8,7 @@ const config = [
   ...baseConfig,
 
   // ================================================================
-  // TYPESCRIPT DOSYALARI — Component, Service, Directive, Pipe vb.
+  // TYPESCRIPT FILES — Component, Service, Directive, Pipe, etc.
   // ================================================================
   {
     files: ["**/*.ts"],
@@ -18,161 +18,161 @@ const config = [
     rules: {
 
       // ================================================================
-      // NAMING — İsimlendirme kuralları
+      // NAMING — Naming conventions
       // ================================================================
 
-      // @Component class'ları "Component" suffix'i ile bitmeli: AppComponent, UserListComponent
+      // @Component classes must end with "Component" suffix: AppComponent, UserListComponent
       "@angular-eslint/component-class-suffix": "error",
 
-      // @Directive class'ları "Directive" suffix'i ile bitmeli: HighlightDirective
+      // @Directive classes must end with "Directive" suffix: HighlightDirective
       "@angular-eslint/directive-class-suffix": "error",
 
-      // Component selector kuralları: element tipinde, app- prefix'i ile, kebab-case
+      // Component selector rules: element type, app- prefix, kebab-case
       "@angular-eslint/component-selector": ["warn", {
         type: "element",
         prefix: "app",
         style: "kebab-case",
       }],
 
-      // Directive selector kuralları: attribute tipinde, app prefix'i ile, camelCase
+      // Directive selector rules: attribute type, app prefix, camelCase
       "@angular-eslint/directive-selector": ["warn", {
         type: "attribute",
         prefix: "app",
         style: "camelCase",
       }],
 
-      // Pipe prefix kuralı — proje genelinde tutarlı pipe isimleri
+      // Pipe prefix rule — consistent pipe names across the project
       "@angular-eslint/pipe-prefix": ["warn", { prefixes: ["app"] }],
 
 
       // ================================================================
-      // LIFECYCLE — Yaşam döngüsü kuralları
+      // LIFECYCLE — Lifecycle hook rules
       // ================================================================
 
-      // Boş lifecycle method yasaklar: ngOnInit() {} — ya doldur ya kaldır
+      // Disallow empty lifecycle methods: ngOnInit() {} — either fill it or remove it
       "@angular-eslint/no-empty-lifecycle-method": "warn",
 
-      // Lifecycle interface'i implement etmeyi zorlar: implements OnInit, implements OnDestroy
+      // Enforce implementing lifecycle interfaces: implements OnInit, implements OnDestroy
       "@angular-eslint/use-lifecycle-interface": "error",
 
-      // Lifecycle method'ları doğru context'te kullanılmalı (Component'te OnInit, Pipe'ta değil)
+      // Lifecycle methods must be used in the correct context (OnInit in Component, not in Pipe)
       "@angular-eslint/contextual-lifecycle": "error",
 
-      // Lifecycle method'ları async olmamalı — RxJS veya Promise kullan
+      // Lifecycle methods should not be async — use RxJS or Promises instead
       "@angular-eslint/no-async-lifecycle-method": "warn",
 
-      // Lifecycle method'ları prototype üzerinde tanımlanmalı — arrow function olmasın
+      // Lifecycle methods must be defined on the prototype — no arrow functions
       "@angular-eslint/require-lifecycle-on-prototype": "warn",
 
-      // Lifecycle method'ları çalışma sırasına göre sıralanmalı: OnInit → OnChanges → OnDestroy
+      // Lifecycle methods should be ordered by execution sequence: OnInit → OnChanges → OnDestroy
       "@angular-eslint/sort-lifecycle-methods": "warn",
 
-      // Lifecycle method'ları doğrudan çağrılmamalı: this.ngOnInit() yasak
+      // Disallow calling lifecycle methods directly: this.ngOnInit() is forbidden
       "@angular-eslint/no-lifecycle-call": "error",
 
 
       // ================================================================
-      // INPUT/OUTPUT — Veri akışı kuralları
+      // INPUT/OUTPUT — Data flow rules
       // ================================================================
 
-      // @Input() alias kullanımını yasaklar: @Input('alias') yerine @Input() doğrudan isim kullan
+      // Disallow @Input() alias: use @Input() with the property name directly instead of @Input('alias')
       "@angular-eslint/no-input-rename": "warn",
 
-      // @Output() alias kullanımını yasaklar — tutarlılık
+      // Disallow @Output() alias — consistency
       "@angular-eslint/no-output-rename": "warn",
 
-      // @Output ismi "on" ile başlamamalı: @Output() onClick yerine @Output() click
+      // @Output name should not start with "on": @Output() click instead of @Output() onClick
       "@angular-eslint/no-output-on-prefix": "error",
 
-      // @Output ismi native DOM event'i ile aynı olmamalı: click, change vb.
+      // @Output name should not conflict with native DOM events: click, change, etc.
       "@angular-eslint/no-output-native": "warn",
 
-      // Decorator yerine metadata property kullanımını yasaklar
-      // inputs: ['foo'] yerine @Input() foo kullan
+      // Disallow metadata property instead of decorators
+      // Use @Input() foo instead of inputs: ['foo']
       "@angular-eslint/no-inputs-metadata-property": "error",
 
-      // outputs: ['bar'] yerine @Output() bar kullan
+      // Use @Output() bar instead of outputs: ['bar']
       "@angular-eslint/no-outputs-metadata-property": "error",
 
-      // Signal kullanmayı önerir — @Input, @ViewChild yerine signal-based API
-      // Angular 17+ yeni pattern
+      // Suggest using signals — signal-based API instead of @Input, @ViewChild
+      // Angular 17+ new pattern
       "@angular-eslint/prefer-signals": "warn",
 
 
       // ================================================================
-      // MODERN ANGULAR — Yeni Angular patterns
+      // MODERN ANGULAR — New Angular patterns
       // ================================================================
 
-      // Constructor injection yerine inject() fonksiyonunu tercih et
-      // Angular 14+ — daha fonksiyonel ve tree-shakeable
+      // Prefer inject() function over constructor injection
+      // Angular 14+ — more functional and tree-shakeable
       "@angular-eslint/prefer-inject": "warn",
 
-      // Standalone component'ları tercih et — NgModule'den bağımsız
+      // Prefer standalone components — independent of NgModule
       // Angular 15+ modern pattern
       "@angular-eslint/prefer-standalone": "warn",
 
-      // OutputEmitterRef tercih et — @Output() EventEmitter yerine
-      // Angular 17+ yeni pattern
+      // Prefer OutputEmitterRef — instead of @Output() EventEmitter
+      // Angular 17+ new pattern
       "@angular-eslint/prefer-output-emitter-ref": "warn",
 
-      // @Output ve OutputRef readonly olmalı — dışarıdan atama yapılmasın
+      // @Output and OutputRef should be readonly — prevent external assignment
       "@angular-eslint/prefer-output-readonly": "warn",
 
-      // İki yönlü binding için model() signal kullan — @Input + @Output yerine
+      // Use model() signal for two-way binding — instead of @Input + @Output
       // Angular 17.1+ pattern
       "@angular-eslint/prefer-signal-model": "warn",
 
 
       // ================================================================
-      // GENEL KALİTE — İyi pratikler
+      // GENERAL QUALITY — Best practices
       // ================================================================
 
-      // Pipe'lar PipeTransform interface'ini implement etmeli
+      // Pipes must implement PipeTransform interface
       "@angular-eslint/use-pipe-transform-interface": "error",
 
-      // Impure pipe yasaklar — her change detection'da çalışır, performans sorunu
+      // Disallow impure pipes — they run on every change detection, causing performance issues
       "@angular-eslint/no-pipe-impure": "warn",
 
-      // forwardRef kullanımını uyarır — genelde circular dependency işareti
+      // Warn about forwardRef usage — usually a sign of circular dependency
       "@angular-eslint/no-forward-ref": "warn",
 
-      // Component selector tanımlamayı zorlar — selector olmadan component kullanılamaz
+      // Enforce component selector definition — components can't be used without a selector
       "@angular-eslint/use-component-selector": "warn",
 
-      // ViewEncapsulation.None kullanımını uyarır — global CSS kirliliği riski
+      // Warn about ViewEncapsulation.None — risk of global CSS pollution
       "@angular-eslint/use-component-view-encapsulation": "warn",
 
-      // providedIn ile Injectable tree-shakeable olur — providers array'de gereksiz
+      // Injectable with providedIn is tree-shakeable — no need for providers array
       "@angular-eslint/use-injectable-provided-in": "warn",
 
-      // Metadata array'lerinde duplicate entry yasaklar
+      // Disallow duplicate entries in metadata arrays
       "@angular-eslint/no-duplicates-in-metadata-arrays": "warn",
 
-      // host metadata property kullan — @HostBinding ve @HostListener yerine
+      // Use host metadata property — instead of @HostBinding and @HostListener
       "@angular-eslint/prefer-host-metadata-property": "warn",
 
-      // Decorator'lar doğru context'te kullanılmalı (Component'te Input, Module'de değil)
+      // Decorators must be used in the correct context (Input in Component, not in Module)
       "@angular-eslint/contextual-decorator": "error",
 
-      // Developer Preview API kullanımını uyarır — stabil değil, değişebilir
+      // Warn about Developer Preview API usage — not stable, may change
       "@angular-eslint/no-developer-preview": "warn",
 
-      // Inline template/style satır sınırı — büyükse ayrı dosyaya taşı
+      // Inline template/style line limits — move to separate files if too large
       "@angular-eslint/component-max-inline-declarations": ["warn", {
         template: 10,
         styles: 8,
       }],
 
-      // takeUntilDestroyed() explicit DestroyRef ile çağrılmalı
+      // takeUntilDestroyed() should be called with explicit DestroyRef
       "@angular-eslint/no-implicit-take-until-destroyed": "warn",
 
-      // Signal'ları çağırmayı unutmayı yakalar: signal yerine signal() (değerine erişim)
+      // Catch forgotten signal invocations: use signal() instead of signal (to access value)
       "@angular-eslint/no-uncalled-signals": "error",
     },
   },
 
   // ================================================================
-  // HTML TEMPLATE DOSYALARI — Angular template kuralları
+  // HTML TEMPLATE FILES — Angular template rules
   // ================================================================
   {
     files: ["**/*.component.html"],
@@ -185,110 +185,110 @@ const config = [
     rules: {
 
       // ================================================================
-      // ESSENTIAL — Temel template kuralları
+      // ESSENTIAL — Core template rules
       // ================================================================
 
-      // [(banana)] hatası — [(ngModel)] doğru, ([ngModel]) yanlış (banana-in-box)
+      // [(banana)] mistake — [(ngModel)] correct, ([ngModel]) incorrect (banana-in-box)
       "@angular-eslint/template/banana-in-box": "error",
 
-      // Template'te == yerine === zorlar
+      // Enforce === instead of == in templates
       "@angular-eslint/template/eqeqeq": "error",
 
-      // async pipe sonucunu negate etmeyi uyarır: !(obs$ | async) yerine (obs$ | async) === false
+      // Warn about negating async pipe results: use (obs$ | async) === false instead of !(obs$ | async)
       "@angular-eslint/template/no-negated-async": "warn",
 
-      // @if/@for/@switch control flow kullanımını zorlar — *ngIf/*ngFor yerine
+      // Enforce @if/@for/@switch control flow — instead of *ngIf/*ngFor
       // Angular 17+ built-in control flow
       "@angular-eslint/template/prefer-control-flow": "warn",
 
 
       // ================================================================
-      // KALİTE — Template best practices
+      // QUALITY — Template best practices
       // ================================================================
 
-      // Aynı attribute'u iki kez yazmayı yasaklar
+      // Disallow duplicate attributes on the same element
       "@angular-eslint/template/no-duplicate-attributes": "error",
 
-      // Template'te $any() kullanımını uyarır — type safety'yi bypass eder
+      // Warn about $any() usage in templates — bypasses type safety
       "@angular-eslint/template/no-any": "warn",
 
-      // Template'te fonksiyon çağrısını uyarır — her change detection'da çalışır
-      // Output handler'lar (click)="onClick()" hariç
+      // Warn about function calls in templates — runs on every change detection
+      // Output handlers like (click)="onClick()" are excluded
       "@angular-eslint/template/no-call-expression": "warn",
 
-      // ! non-null assertion'ı template'te yasaklar — güvenli kontrol kullan
+      // Disallow ! non-null assertion in templates — use safe checks instead
       "@angular-eslint/template/no-non-null-assertion": "warn",
 
-      // Inline style kullanımını uyarır — CSS dosyasına taşı
+      // Warn about inline styles — move to CSS file
       "@angular-eslint/template/no-inline-styles": "warn",
 
-      // Boş control flow bloklarını yasaklar: @if (cond) { } — ya doldur ya kaldır
+      // Disallow empty control flow blocks: @if (cond) { } — either fill it or remove it
       "@angular-eslint/template/no-empty-control-flow": "warn",
 
-      // Control flow koşul karmaşıklığını sınırlar
+      // Limit control flow condition complexity
       "@angular-eslint/template/conditional-complexity": ["warn", 4],
 
-      // Angular built-in pipe'larını tercih et: date, uppercase, lowercase vb.
+      // Prefer Angular built-in pipes: date, uppercase, lowercase, etc.
       "@angular-eslint/template/prefer-built-in-pipes": "warn",
 
-      // İçeriksiz element'lerde self-closing tag kullan: <app-icon />
+      // Use self-closing tags for elements without content: <app-icon />
       "@angular-eslint/template/prefer-self-closing-tags": "warn",
 
-      // @for ile @empty kullan — boş liste durumunu kapsa
+      // Use @empty with @for — handle the empty list case
       "@angular-eslint/template/prefer-at-empty": "warn",
 
-      // Aynı koşulun negated hali yerine @else kullan
+      // Use @else instead of negated version of the same condition
       "@angular-eslint/template/prefer-at-else": "warn",
 
-      // ngSrc kullan (NgOptimizedImage) — lazy loading ve performans
+      // Use ngSrc (NgOptimizedImage) — lazy loading and performance
       "@angular-eslint/template/prefer-ngsrc": "warn",
 
-      // Attribute sıralama tutarlılığı
+      // Enforce consistent attribute ordering
       "@angular-eslint/template/attributes-order": "warn",
 
 
       // ================================================================
-      // ACCESSIBILITY (a11y) — Erişilebilirlik kuralları
-      // Engelli kullanıcılar için kritik
+      // ACCESSIBILITY (a11y) — Accessibility rules
+      // Critical for users with disabilities
       // ================================================================
 
-      // img/area/input[type=image] elementlerinde alt text zorunlu
+      // Require alt text on img/area/input[type=image] elements
       "@angular-eslint/template/alt-text": "warn",
 
-      // <button> elementinde type attribute zorunlu
+      // Require type attribute on <button> elements
       "@angular-eslint/template/button-has-type": "warn",
 
-      // Click event'i olan elementte keyboard event de olmalı (keydown/keyup/keypress)
+      // Elements with click events must also have keyboard events (keydown/keyup/keypress)
       "@angular-eslint/template/click-events-have-key-events": "warn",
 
-      // Heading (h1-h6), anchor (a), button elementlerinde içerik olmalı — boş bırakma
+      // Heading (h1-h6), anchor (a), and button elements must have content — don't leave empty
       "@angular-eslint/template/elements-content": "warn",
 
-      // Mouse event'i olan elementte keyboard event de olmalı
+      // Elements with mouse events must also have keyboard events
       "@angular-eslint/template/mouse-events-have-key-events": "warn",
 
-      // İnteraktif elementler (button, a, input) focusable olmalı
+      // Interactive elements (button, a, input) must be focusable
       "@angular-eslint/template/interactive-supports-focus": "warn",
 
-      // <label> ile form element'i ilişkilendirilmeli: for veya wrapping
+      // <label> must be associated with a form element: using for or wrapping
       "@angular-eslint/template/label-has-associated-control": "warn",
 
-      // tabindex pozitif olmamalı — tab sırasını bozar
+      // tabindex should not be positive — it disrupts tab order
       "@angular-eslint/template/no-positive-tabindex": "warn",
 
-      // autofocus attribute kullanımını uyarır — kullanıcı deneyimini bozabilir
+      // Warn about autofocus attribute — can disrupt user experience
       "@angular-eslint/template/no-autofocus": "warn",
 
-      // <marquee>, <blink> gibi dikkat dağıtıcı elementleri yasaklar
+      // Disallow distracting elements like <marquee> and <blink>
       "@angular-eslint/template/no-distracting-elements": "error",
 
-      // ARIA role'ler gerekli aria-* attribute'lara sahip olmalı
+      // ARIA roles must have required aria-* attributes
       "@angular-eslint/template/role-has-required-aria": "warn",
 
-      // ARIA attribute'larının geçerli olmasını zorlar
+      // Enforce valid ARIA attributes
       "@angular-eslint/template/valid-aria": "warn",
 
-      // scope attribute sadece <th> elementinde kullanılmalı
+      // scope attribute should only be used on <th> elements
       "@angular-eslint/template/table-scope": "warn",
     },
   },

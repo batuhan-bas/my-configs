@@ -19,134 +19,134 @@ const config = [
     rules: {
 
       // ================================================================
-      // HOOKS — React Hooks kuralları
+      // HOOKS — React Hooks rules
       // ================================================================
 
-      // Hook'lar sadece fonksiyon component'in veya custom hook'un en üst seviyesinde çağrılmalı
-      // if/for/nested function içinde hook çağırmak yasak
+      // Hooks must only be called at the top level of function components or custom hooks
+      // Calling hooks inside if/for/nested functions is forbidden
       "react-hooks/rules-of-hooks": "error",
 
-      // useEffect/useCallback/useMemo dependency array'inin eksiksiz olmasını zorlar
-      // Eksik dependency = stale closure bug'ı
+      // Enforce complete dependency arrays for useEffect/useCallback/useMemo
+      // Missing dependencies = stale closure bugs
       "react-hooks/exhaustive-deps": "warn",
 
 
       // ================================================================
-      // JSX — JSX yazım kuralları
+      // JSX — JSX syntax rules
       // ================================================================
 
-      // React 17+ — artık import React from 'react' gerekmez (JSX transform)
+      // React 17+ — import React from 'react' is no longer required (JSX transform)
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
 
-      // Listede her eleman için key prop'u zorunlu — React reconciliation için kritik
+      // Require key prop for every element in a list — critical for React reconciliation
       "react/jsx-key": "error",
 
-      // JSX'te aynı prop'u iki kez yazma yasaklar: <Foo bar={1} bar={2} />
+      // Disallow duplicate props in JSX: <Foo bar={1} bar={2} />
       "react/jsx-no-duplicate-props": "error",
 
-      // JSX'te tanımlanmamış değişken kullanımını yakalar
+      // Catch undefined variables used in JSX
       "react/jsx-no-undef": "error",
 
-      // target="_blank" güvenlik açığı — rel="noreferrer" olmadan kullanımı yasaklar
+      // target="_blank" security risk — disallow without rel="noreferrer"
       "react/jsx-no-target-blank": "error",
 
-      // Yorum yanlışlıkla text node olarak render edilmesini yakalar
-      // {/* doğru */} vs /* yanlış */
+      // Catch comments accidentally rendered as text nodes
+      // {/* correct */} vs /* incorrect */
       "react/jsx-no-comment-textnodes": "warn",
 
-      // Component isimleri PascalCase olmalı: <MyComponent /> doğru, <myComponent /> yanlış
+      // Component names must be PascalCase: <MyComponent /> correct, <myComponent /> incorrect
       "react/jsx-pascal-case": "warn",
 
-      // Çocuğu olmayan component'lerde self-closing zorlar: <Foo /> doğru, <Foo></Foo> yanlış
+      // Enforce self-closing for components without children: <Foo /> correct, <Foo></Foo> incorrect
       "react/self-closing-comp": "warn",
 
-      // Gereksiz JSX fragment'ları yakalar: <>{child}</> yerine sadece {child}
+      // Catch unnecessary JSX fragments: <>{child}</> should just be {child}
       "react/jsx-no-useless-fragment": "warn",
 
-      // String yeterliyken gereksiz JSX expression yasaklar: foo="bar" doğru, foo={"bar"} yanlış
+      // Disallow unnecessary JSX expressions for strings: foo="bar" correct, foo={"bar"} incorrect
       "react/jsx-curly-brace-presence": ["warn", { props: "never", children: "never" }],
 
-      // Boolean prop'larda kısa yazım: <Foo disabled /> doğru, <Foo disabled={true} /> gereksiz
+      // Use shorthand for boolean props: <Foo disabled /> correct, <Foo disabled={true} /> unnecessary
       "react/jsx-boolean-value": ["warn", "never"],
 
-      // JSX fragment kısa yazımı: <></> kullan, <React.Fragment></React.Fragment> değil
+      // Use JSX fragment shorthand: <></> instead of <React.Fragment></React.Fragment>
       "react/jsx-fragments": ["warn", "syntax"],
 
-      // JSX prop'larında .bind() veya arrow function kullanımını uyarır — her render'da yeni referans
+      // Warn against .bind() or arrow functions in JSX props — creates new reference every render
       "react/jsx-no-bind": ["warn", {
-        allowArrowFunctions: true,    // arrow genelde kabul edilir
-        allowBind: false,             // .bind() yasak
+        allowArrowFunctions: true,    // arrow functions are generally acceptable
+        allowBind: false,             // .bind() is forbidden
         allowFunctions: false,
       }],
 
-      // javascript: URL'lerini JSX'te yasaklar — XSS riski
+      // Disallow javascript: URLs in JSX — XSS risk
       "react/jsx-no-script-url": "error",
 
-      // {0 && <Foo />} gibi falsy render leak'lerini yakalar — 0 ekranda görünür
+      // Catch falsy render leaks like {0 && <Foo />} — 0 will be visible on screen
       "react/jsx-no-leaked-render": "warn",
 
-      // Context provider'da her render'da yeni obje oluşturmayı uyarır — gereksiz re-render
+      // Warn against creating new objects in context providers every render — unnecessary re-renders
       "react/jsx-no-constructed-context-values": "warn",
 
 
       // ================================================================
-      // COMPONENT — Component yazım kuralları
+      // COMPONENT — Component authoring rules
       // ================================================================
 
-      // TypeScript kullanıyoruz, prop-types gereksiz
+      // We use TypeScript, prop-types is unnecessary
       "react/prop-types": "off",
 
-      // Component'e displayName vermeyi önerir — DevTools'ta debug için faydalı
+      // Suggest displayName for components — useful for debugging in DevTools
       "react/display-name": "warn",
 
-      // dangerouslySetInnerHTML ile children aynı anda kullanılamaz
+      // dangerouslySetInnerHTML and children cannot be used together
       "react/no-danger-with-children": "error",
 
-      // Deprecated React API kullanımını uyarır (componentWillMount vb.)
+      // Warn about deprecated React APIs (componentWillMount, etc.)
       "react/no-deprecated": "warn",
 
-      // State'i doğrudan mutate etmeyi yasaklar: this.state.foo = bar yerine setState kullan
+      // Disallow direct state mutation: use setState instead of this.state.foo = bar
       "react/no-direct-mutation-state": "error",
 
-      // String ref yasaklar: ref="myRef" yerine useRef veya createRef kullan
+      // Disallow string refs: use useRef or createRef instead of ref="myRef"
       "react/no-string-refs": "error",
 
-      // findDOMNode kullanımını yasaklar — ref kullan
+      // Disallow findDOMNode — use ref instead
       "react/no-find-dom-node": "warn",
 
-      // HTML'de escape edilmemiş karakterleri yakalar: > yerine &gt; veya {'>'} kullan
+      // Catch unescaped HTML characters: use &gt; or {'>'} instead of >
       "react/no-unescaped-entities": "warn",
 
-      // Bilinmeyen DOM property'lerini yakalar: class yerine className, for yerine htmlFor
+      // Catch unknown DOM properties: use className instead of class, htmlFor instead of for
       "react/no-unknown-property": "error",
 
-      // render() veya function component body dışında component tanımlamayı yasaklar
-      // Her render'da yeni component = state kaybı
+      // Disallow defining components inside render() or function component body
+      // A new component on every render = state loss
       "react/no-unstable-nested-components": "warn",
 
-      // Array index'ini key olarak kullanmayı uyarır — sıralama değişince bug
+      // Warn against using array index as key — causes bugs when order changes
       "react/no-array-index-key": "warn",
 
-      // dangerouslySetInnerHTML kullanımını uyarır — XSS riski
+      // Warn about dangerouslySetInnerHTML usage — XSS risk
       "react/no-danger": "warn",
 
-      // Hook state destructuring'inde tutarlı isimlendirme: const [foo, setFoo] = useState()
+      // Enforce consistent naming in hook state destructuring: const [foo, setFoo] = useState()
       "react/hook-use-state": "warn",
 
-      // iframe'de sandbox attribute zorunlu — güvenlik
+      // Require sandbox attribute on iframes — security
       "react/iframe-missing-sandbox": "warn",
 
-      // void element'lere (br, hr, img) children geçmeyi yasaklar
+      // Disallow passing children to void elements (br, hr, img)
       "react/void-dom-elements-no-children": "error",
 
-      // style prop'u obje olmalı: style="color:red" yanlış, style={{ color: 'red' }} doğru
+      // style prop must be an object: style="color:red" wrong, style={{ color: 'red' }} correct
       "react/style-prop-object": "error",
 
-      // forwardRef kullanan component'lerde ref parametresi zorunlu
+      // Require ref parameter in components using forwardRef
       "react/forward-ref-uses-ref": "warn",
 
-      // Component fonksiyon tanım stilini zorlar — arrow function tercih et
+      // Enforce function component definition style — prefer arrow functions
       "react/function-component-definition": ["warn", {
         namedComponents: "arrow-function",
         unnamedComponents: "arrow-function",
