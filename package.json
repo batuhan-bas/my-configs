@@ -1,0 +1,32 @@
+{
+  "name": "@batuhan-bas/configs",
+  "version": "1.0.0",
+  "description": "Shared ESLint and Prettier configs",
+  "exports": {
+    "./eslint": "./eslint.config.js",
+    "./eslint/base": "./eslint/base.js",
+    "./eslint/react": "./eslint/react.js",
+    "./eslint/vue": "./eslint/vue.js",
+    "./eslint/angular": "./eslint/angular.js",
+    "./prettier": "./prettier.config.js"
+  },
+  "keywords": [],
+  "author": "batuhan-bas",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "peerDependencies": {
+    "eslint": ">=9",
+    "prettier": ">=3",
+    "@typescript-eslint/eslint-plugin": ">=8",
+    "@typescript-eslint/parser": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "eslint-plugin-react": { "optional": true },
+    "eslint-plugin-react-hooks": { "optional": true },
+    "eslint-plugin-vue": { "optional": true },
+    "vue-eslint-parser": { "optional": true },
+    "@angular-eslint/eslint-plugin": { "optional": true },
+    "@angular-eslint/eslint-plugin-template": { "optional": true },
+    "@angular-eslint/template-parser": { "optional": true }
+  }
+}
