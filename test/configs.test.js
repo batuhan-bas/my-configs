@@ -7,48 +7,96 @@ const prettierCompat = require("eslint-config-prettier");
 const fixturesDir = path.join(__dirname, "fixtures");
 const eslintMajor = Number(ESLint.version.split(".")[0]);
 
+const reactTodo =
+  // eslint-plugin-react 7.x still calls context.getFilename(), removed in ESLint 10
+  eslintMajor >= 10 && "eslint-plugin-react does not support ESLint 10 yet";
+
+// [fixture file, rule that must be reported in it]
 const cases = [
-  { name: "base", config: "../eslint/base", expectedRule: "@typescript-eslint/no-floating-promises" },
+  {
+    name: "base",
+    config: require("../eslint/base"),
+    expected: [
+      ["src/index.ts", "@typescript-eslint/no-floating-promises"],
+      ["src/legacy.js", "no-var"],
+    ],
+  },
   {
     name: "react",
-    config: "../eslint/react",
-    expectedRule: "react/jsx-key",
-    // eslint-plugin-react 7.x still calls context.getFilename(), removed in ESLint 10
-    todo: eslintMajor >= 10 && "eslint-plugin-react does not support ESLint 10 yet",
+    config: require("../eslint/react"),
+    todo: reactTodo,
+    expected: [
+      ["src/App.tsx", "react/jsx-key"],
+      ["src/List.jsx", "react/jsx-key"],
+    ],
   },
-  { name: "vue", config: "../eslint/vue", expectedRule: "vue/require-v-for-key" },
-  { name: "angular", config: "../eslint/angular", expectedRule: "@angular-eslint/component-selector" },
-  { name: "angular", config: "../eslint/angular", expectedRule: "@angular-eslint/template/eqeqeq" },
+  {
+    name: "vue",
+    config: require("../eslint/vue"),
+    expected: [
+      ["src/UserCard.vue", "vue/require-v-for-key"],
+      ["src/SaveButton.vue", "@typescript-eslint/no-floating-promises"],
+    ],
+  },
+  {
+    name: "angular",
+    config: require("../eslint/angular"),
+    expected: [
+      ["src/user-card.component.ts", "@angular-eslint/component-selector"],
+      ["src/user-card.component.html", "@angular-eslint/template/eqeqeq"],
+      ["src/badge.component.ts", "@angular-eslint/template/eqeqeq"],
+    ],
+  },
 ];
 
-const lintFixture = async (fixture, configPath) => {
+const lintFixture = async (fixture, config) => {
   const eslint = new ESLint({
     cwd: path.join(fixturesDir, fixture),
     overrideConfigFile: true,
-    overrideConfig: require(configPath),
+    overrideConfig: config,
   });
-  return eslint.lintFiles(["src"]);
+  const results = await eslint.lintFiles(["."]);
+  return results.map((result) => ({
+    file: path.relative(path.join(fixturesDir, fixture), result.filePath),
+    messages: result.messages,
+  }));
 };
 
-const fatalMessages = (results) =>
-  results.flatMap((result) =>
-    result.messages
-      .filter((message) => message.fatal || message.ruleId === null)
-      .map((message) => `${path.relative(fixturesDir, result.filePath)}: ${message.message}`),
-  );
-
 describe("eslint configs", () => {
-  for (const { name, config, expectedRule, todo = false } of cases) {
-    it(`${name}: loads, parses every fixture file and reports ${expectedRule}`, { todo }, async () => {
+  for (const { name, config, expected, todo = false } of cases) {
+    it(`${name}: loads, parses every fixture file and reports the expected rules`, { todo }, async () => {
       const results = await lintFixture(name, config);
 
-      assert.ok(results.length > 0, "no files were linted");
-      assert.deepEqual(fatalMessages(results), []);
+      const fatal = results.flatMap(({ file, messages }) =>
+        messages.filter((m) => m.fatal || m.ruleId === null).map((m) => `${file}: ${m.message}`),
+      );
+      assert.deepEqual(fatal, []);
 
-      const ruleIds = results.flatMap((result) => result.messages.map((message) => message.ruleId));
-      assert.ok(ruleIds.includes(expectedRule), `expected ${expectedRule}, got: ${ruleIds.join(", ")}`);
+      for (const [file, rule] of expected) {
+        const result = results.find((r) => r.file === file);
+        assert.ok(result, `${file} was not linted`);
+        const ruleIds = result.messages.map((m) => m.ruleId);
+        assert.ok(ruleIds.includes(rule), `${file}: expected ${rule}, got: ${ruleIds.join(", ")}`);
+      }
     });
   }
+
+  it("base: ignores build output", async () => {
+    const results = await lintFixture("base", require("../eslint/base"));
+    assert.deepEqual(
+      results.filter(({ file }) => file.startsWith("dist")),
+      [],
+    );
+  });
+
+  it("angular: createAngularConfig applies a custom selector prefix", async () => {
+    const { createAngularConfig } = require("../eslint/angular");
+    const results = await lintFixture("angular", createAngularConfig({ prefix: ["app", "user"] }));
+    const selectorWarnings = results
+      .flatMap(({ messages }) => messages)
+      .filter((m) => m.ruleId === "@angular-eslint/component-selector");
+    assert.deepEqual(selectorWarnings, []);
+  });
 
   it("eslint.config.js re-exports the base config", () => {
     assert.equal(require("../eslint.config"), require("../eslint/base"));

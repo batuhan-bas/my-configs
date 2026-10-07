@@ -1,12 +1,22 @@
+const js = require("@eslint/js");
 const baseConfig = require("./base");
 const vuePlugin = require("eslint-plugin-vue");
 const vueParser = require("vue-eslint-parser");
+const tseslint = require("@typescript-eslint/eslint-plugin");
 const tsparser = require("@typescript-eslint/parser");
+const coreRules = require("./rules/core");
+const typescriptRules = require("./rules/typescript");
+
+const typescriptOverrides = tseslint.configs["eslint-recommended"].overrides[0].rules;
 
 /** @type {import("eslint").Linter.Config[]} */
 const config = [
   ...baseConfig,
+
+  // TypeScript inside .vue files must be type-checked too:
+  // .vue files have to be included in tsconfig.json (create-vue and Nuxt do this by default)
   {
+    name: "batuhan-bas/vue/typescript",
     files: ["**/*.vue"],
     languageOptions: {
       parser: vueParser,
@@ -15,8 +25,23 @@ const config = [
         ecmaVersion: "latest",
         sourceType: "module",
         extraFileExtensions: [".vue"],
+        projectService: true,
       },
     },
+    plugins: {
+      "@typescript-eslint": tseslint,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...typescriptOverrides,
+      ...coreRules,
+      ...typescriptRules,
+    },
+  },
+
+  {
+    name: "batuhan-bas/vue",
+    files: ["**/*.vue"],
     plugins: {
       vue: vuePlugin,
     },

@@ -8,7 +8,10 @@ Supports React, Next.js, Vue, Nuxt, and Angular projects.
 ```
 my-configs/
 ├── eslint/
-│   ├── base.js       ← TypeScript rules (shared across all frameworks)
+│   ├── rules/
+│   │   ├── core.js       ← core ESLint rules (JS + TS)
+│   │   └── typescript.js ← @typescript-eslint rules
+│   ├── base.js       ← ignores + JavaScript + TypeScript configs (shared across all frameworks)
 │   ├── react.js      ← base + React/Next.js rules
 │   ├── vue.js        ← base + Vue/Nuxt rules
 │   └── angular.js    ← base + Angular rules
@@ -28,7 +31,7 @@ Add peer dependencies based on your framework:
 
 | Framework | Additional Dependencies |
 |-----------|------------------------|
-| All (required) | `eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser` |
+| All (required) | `eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser` |
 | Prettier config | `prettier` |
 | React / Next.js | `eslint-plugin-react eslint-plugin-react-hooks` |
 | Vue / Nuxt | `eslint-plugin-vue vue-eslint-parser` |
@@ -87,6 +90,18 @@ module.exports = [
 ];
 ```
 
+To use a selector prefix other than `app`:
+
+```js
+const { createAngularConfig } = require("@batuhan-bas/configs/eslint/angular");
+
+module.exports = [
+  ...createAngularConfig({ prefix: ["acme", "ui"] }),
+];
+```
+
+Inline templates (``template: `...` ``) are linted with the same template rules as `.html` files.
+
 ### TypeScript Only (no framework)
 
 ```js
@@ -101,6 +116,34 @@ module.exports = [...sharedConfig];
 
 ```js
 module.exports = require("@batuhan-bas/configs/prettier");
+```
+
+## What Gets Linted
+
+| Files | Rules |
+|-------|-------|
+| `*.js`, `*.mjs`, `*.cjs`, `*.jsx` | `@eslint/js` recommended + core rules, browser and Node globals |
+| `*.ts`, `*.tsx`, `*.mts`, `*.cts` | above + TypeScript rules (type-aware, uses your `tsconfig.json`) |
+| `*.vue` | TypeScript rules for `<script>` + Vue rules (`.vue` files must be in `tsconfig.json`) |
+| `*.html` (Angular preset) | Angular template rules |
+
+Build output is ignored by default: `dist`, `build`, `out`, `coverage`, `.next`, `.nuxt`,
+`.output`, `.angular`, `.vercel`, `*.min.js`.
+
+TypeScript files that are not part of a `tsconfig.json` (e.g. `vite.config.ts` in some setups) need
+to be added to a tsconfig, or excluded with type-checked rules disabled:
+
+```js
+const tseslint = require("@typescript-eslint/eslint-plugin");
+
+module.exports = [
+  ...sharedConfig,
+  {
+    files: ["*.config.ts"],
+    languageOptions: { parserOptions: { projectService: false } },
+    rules: tseslint.configs["disable-type-checked"].rules,
+  },
+];
 ```
 
 ## Rule Summary
