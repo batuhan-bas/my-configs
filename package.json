@@ -39,7 +39,8 @@
   "files": [
     "eslint",
     "eslint.config.js",
-    "prettier.config.js"
+    "prettier.config.js",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=18.18"
@@ -49,7 +50,9 @@
   },
   "packageManager": "pnpm@10.27.0",
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "changeset": "changeset",
+    "release": "pnpm test && changeset publish"
   },
   "peerDependencies": {
     "@angular-eslint/eslint-plugin": ">=20",
@@ -95,6 +98,7 @@
     "@angular-eslint/eslint-plugin": "^22.5.0",
     "@angular-eslint/eslint-plugin-template": "^22.5.0",
     "@angular-eslint/template-parser": "^22.5.0",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^9.39.5",
     "@typescript-eslint/eslint-plugin": "^8.71.1",
     "@typescript-eslint/parser": "^8.71.1",

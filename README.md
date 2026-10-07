@@ -222,6 +222,24 @@ module.exports = [
 ];
 ```
 
+## Releasing
+
+Versions and `CHANGELOG.md` are managed with [Changesets](https://github.com/changesets/changesets).
+
+1. Add a changeset to every PR that changes the published configs:
+
+   ```bash
+   pnpm changeset
+   ```
+
+   Use `patch` for fixes, `minor` for new rules that only warn or new options, `major` for new
+   `error` rules or anything else that can break a consumer's lint run.
+
+2. After merging to `main`, the Release workflow opens a "chore: version packages" PR.
+3. Merging that PR bumps the version, updates the changelog and publishes to npm with provenance.
+
+The workflow needs an `NPM_TOKEN` repository secret (npm granular access token with publish rights).
+
 ## License
 
 [MIT](LICENSE)
