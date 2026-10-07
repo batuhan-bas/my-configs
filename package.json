@@ -33,6 +33,7 @@
     "./eslint/react": "./eslint/react.js",
     "./eslint/vue": "./eslint/vue.js",
     "./eslint/angular": "./eslint/angular.js",
+    "./eslint/utils": "./eslint/utils.js",
     "./prettier": "./prettier.config.js",
     "./package.json": "./package.json"
   },

@@ -89,6 +89,24 @@ describe("eslint configs", () => {
     );
   });
 
+  it("base: lints tooling config files outside tsconfig without type information", async () => {
+    const results = await lintFixture("base", require("../eslint/base"));
+    const viteConfig = results.find(({ file }) => file === "vite.config.ts");
+    assert.ok(viteConfig, "vite.config.ts was not linted");
+    assert.deepEqual(viteConfig.messages, []);
+  });
+
+  it("utils: disableTypeChecked lints files outside tsconfig without type information", async () => {
+    const { disableTypeChecked } = require("../eslint/utils");
+    const results = await lintFixture("tooling", [
+      ...require("../eslint/base"),
+      ...disableTypeChecked(["scripts/**"]),
+    ]);
+    const seed = results.find(({ file }) => file === path.join("scripts", "seed.ts"));
+    assert.ok(seed, "scripts/seed.ts was not linted");
+    assert.deepEqual(seed.messages, []);
+  });
+
   it("angular: createAngularConfig applies a custom selector prefix", async () => {
     const { createAngularConfig } = require("../eslint/angular");
     const results = await lintFixture("angular", createAngularConfig({ prefix: ["app", "user"] }));

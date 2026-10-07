@@ -4,6 +4,7 @@ const tseslint = require("@typescript-eslint/eslint-plugin");
 const tsparser = require("@typescript-eslint/parser");
 const coreRules = require("./rules/core");
 const typescriptRules = require("./rules/typescript");
+const { disableTypeChecked } = require("./utils");
 
 // Core rules that TypeScript already checks (no-undef, no-dupe-keys, etc.) — turned off for TS
 const typescriptOverrides = tseslint.configs["eslint-recommended"].overrides[0].rules;
@@ -82,6 +83,12 @@ const config = [
       ...typescriptRules,
     },
   },
+
+  // ================================================================
+  // TOOLING CONFIG FILES — vite.config.ts, vitest.config.mts, etc.
+  // These are often outside tsconfig.json, so lint them without type information
+  // ================================================================
+  ...disableTypeChecked(["**/*.config.{ts,mts,cts}"]),
 ];
 
 module.exports = config;

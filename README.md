@@ -130,19 +130,19 @@ module.exports = require("@batuhan-bas/configs/prettier");
 Build output is ignored by default: `dist`, `build`, `out`, `coverage`, `.next`, `.nuxt`,
 `.output`, `.angular`, `.vercel`, `*.min.js`.
 
-TypeScript files that are not part of a `tsconfig.json` (e.g. `vite.config.ts` in some setups) need
-to be added to a tsconfig, or excluded with type-checked rules disabled:
+Tooling config files (`*.config.ts`, `*.config.mts`, `*.config.cts` — e.g. `vite.config.ts`) are
+linted **without type information**, because they are often not part of `tsconfig.json`.
+
+Other TypeScript files outside your `tsconfig.json` (scripts, tooling) fail with
+_"was not found by the project service"_. Add them to a tsconfig, or lint them without types:
 
 ```js
-const tseslint = require("@typescript-eslint/eslint-plugin");
+const sharedConfig = require("@batuhan-bas/configs/eslint/react");
+const { disableTypeChecked } = require("@batuhan-bas/configs/eslint/utils");
 
 module.exports = [
   ...sharedConfig,
-  {
-    files: ["*.config.ts"],
-    languageOptions: { parserOptions: { projectService: false } },
-    rules: tseslint.configs["disable-type-checked"].rules,
-  },
+  ...disableTypeChecked(["scripts/**"]),
 ];
 ```
 
