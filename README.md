@@ -19,14 +19,17 @@ my-configs/
 ## Installation
 
 ```bash
-pnpm add -D github:batuhan-bas/my-configs
+pnpm add -D @batuhan-bas/configs
+# or
+npm install -D @batuhan-bas/configs
 ```
 
 Add peer dependencies based on your framework:
 
 | Framework | Additional Dependencies |
 |-----------|------------------------|
-| All (required) | `eslint prettier @typescript-eslint/eslint-plugin @typescript-eslint/parser` |
+| All (required) | `eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser` |
+| Prettier config | `prettier` |
 | React / Next.js | `eslint-plugin-react eslint-plugin-react-hooks` |
 | Vue / Nuxt | `eslint-plugin-vue vue-eslint-parser` |
 | Angular | `@angular-eslint/eslint-plugin @angular-eslint/eslint-plugin-template @angular-eslint/template-parser` |
@@ -139,12 +142,11 @@ module.exports = require("@batuhan-bas/configs/prettier");
 ## Updating
 
 ```bash
-# Make changes in the config repo → push
-git push
-
 # Update in the consuming project
-pnpm add -D github:batuhan-bas/my-configs
+pnpm update @batuhan-bas/configs --latest
 ```
+
+Requirements: Node.js `>=18.18`, ESLint `9` or `10` (flat config).
 
 ## Project-Specific Overrides
 
@@ -163,3 +165,7 @@ module.exports = [
   },
 ];
 ```
+
+## License
+
+[MIT](LICENSE)
