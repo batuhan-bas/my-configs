@@ -30,7 +30,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Use ESLint ${{ matrix.eslint }}
         if: matrix.eslint != 9
-        run: pnpm add -D eslint@^${{ matrix.eslint }}
+        run: pnpm add -D eslint@^${{ matrix.eslint }} @eslint/js@^${{ matrix.eslint }}
       - run: pnpm test
       - name: Check published files
         run: npm pack --dry-run

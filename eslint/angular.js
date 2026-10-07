@@ -3,15 +3,27 @@ const angularPlugin = require("@angular-eslint/eslint-plugin");
 const angularTemplatePlugin = require("@angular-eslint/eslint-plugin-template");
 const angularTemplateParser = require("@angular-eslint/template-parser");
 
-/** @type {import("eslint").Linter.Config[]} */
-const config = [
+/**
+ * Creates the Angular config with a custom selector prefix.
+ *
+ * @example
+ * const { createAngularConfig } = require("@batuhan-bas/configs/eslint/angular");
+ * module.exports = createAngularConfig({ prefix: ["acme", "ui"] });
+ *
+ * @param {{ prefix?: string | string[] }} [options]
+ * @returns {import("eslint").Linter.Config[]}
+ */
+const createAngularConfig = ({ prefix = "app" } = {}) => [
   ...baseConfig,
 
   // ================================================================
   // TYPESCRIPT FILES — Component, Service, Directive, Pipe, etc.
   // ================================================================
   {
+    name: "batuhan-bas/angular",
     files: ["**/*.ts"],
+    // Lint inline templates (template: `...`) with the HTML template rules below
+    processor: angularTemplatePlugin.processors["extract-inline-html"],
     plugins: {
       "@angular-eslint": angularPlugin,
     },
@@ -27,22 +39,22 @@ const config = [
       // @Directive classes must end with "Directive" suffix: HighlightDirective
       "@angular-eslint/directive-class-suffix": "error",
 
-      // Component selector rules: element type, app- prefix, kebab-case
+      // Component selector rules: element type, prefix (default "app-"), kebab-case
       "@angular-eslint/component-selector": ["warn", {
         type: "element",
-        prefix: "app",
+        prefix,
         style: "kebab-case",
       }],
 
-      // Directive selector rules: attribute type, app prefix, camelCase
+      // Directive selector rules: attribute type, prefix (default "app"), camelCase
       "@angular-eslint/directive-selector": ["warn", {
         type: "attribute",
-        prefix: "app",
+        prefix,
         style: "camelCase",
       }],
 
       // Pipe prefix rule — consistent pipe names across the project
-      "@angular-eslint/pipe-prefix": ["warn", { prefixes: ["app"] }],
+      "@angular-eslint/pipe-prefix": ["warn", { prefixes: [prefix].flat() }],
 
 
       // ================================================================
@@ -175,7 +187,9 @@ const config = [
   // HTML TEMPLATE FILES — Angular template rules
   // ================================================================
   {
-    files: ["**/*.component.html"],
+    name: "batuhan-bas/angular/template",
+    // Also matches inline templates extracted by the processor above
+    files: ["**/*.html"],
     languageOptions: {
       parser: angularTemplateParser,
     },
@@ -294,4 +308,7 @@ const config = [
   },
 ];
 
+const config = createAngularConfig();
+
 module.exports = config;
+module.exports.createAngularConfig = createAngularConfig;

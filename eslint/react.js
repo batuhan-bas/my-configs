@@ -6,7 +6,15 @@ const reactHooksPlugin = require("eslint-plugin-react-hooks");
 const config = [
   ...baseConfig,
   {
-    files: ["**/*.{ts,tsx}"],
+    name: "batuhan-bas/react",
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     plugins: {
       react: reactPlugin,
       "react-hooks": reactHooksPlugin,

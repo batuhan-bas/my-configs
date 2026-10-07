@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      globals:
+        specifier: ^17.13.0
+        version: 17.13.0
     devDependencies:
       '@angular-eslint/eslint-plugin':
         specifier: ^22.5.0
@@ -17,6 +21,9 @@ importers:
       '@angular-eslint/template-parser':
         specifier: ^22.5.0
         version: 22.5.0(eslint@9.39.5)(typescript@6.0.3)
+      '@eslint/js':
+        specifier: ^9.39.5
+        version: 9.39.5
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.71.1
         version: 8.71.1(@typescript-eslint/parser@8.71.1(eslint@9.39.5)(typescript@6.0.3))(eslint@9.39.5)(typescript@6.0.3)
@@ -674,6 +681,10 @@ packages:
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+
+  globals@17.13.0:
+    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -2075,6 +2086,8 @@ snapshots:
       is-glob: 4.0.3
 
   globals@14.0.0: {}
+
+  globals@17.13.0: {}
 
   globalthis@1.0.4:
     dependencies:
