@@ -12,6 +12,8 @@ my-configs/
 │   │   ├── core.js       ← core ESLint rules (JS + TS)
 │   │   └── typescript.js ← @typescript-eslint rules
 │   ├── base.js       ← ignores + JavaScript + TypeScript configs (shared across all frameworks)
+│   ├── prettier.js   ← turns off rules that conflict with Prettier (last in every preset)
+│   ├── utils.js      ← disableTypeChecked(files)
 │   ├── react.js      ← base + React/Next.js rules
 │   ├── vue.js        ← base + Vue/Nuxt rules
 │   └── angular.js    ← base + Angular rules
@@ -116,6 +118,19 @@ module.exports = [...sharedConfig];
 
 ```js
 module.exports = require("@batuhan-bas/configs/prettier");
+```
+
+ESLint and Prettier don't fight: every preset ends with
+[`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier), which turns off
+all ESLint rules that conflict with Prettier. If you add other plugins **after** the preset
+(e.g. `@stylistic`), put the Prettier block last again:
+
+```js
+module.exports = [
+  ...sharedConfig,
+  ...yourOtherPlugins,
+  ...require("@batuhan-bas/configs/eslint/prettier"),
+];
 ```
 
 ## What Gets Linted
