@@ -1,32 +1,74 @@
 {
   "name": "@batuhan-bas/configs",
   "version": "1.0.0",
-  "description": "Shared ESLint and Prettier configs",
+  "description": "Shared ESLint (flat config) and Prettier configs for TypeScript, React, Vue and Angular projects",
+  "keywords": [
+    "eslint",
+    "eslintconfig",
+    "eslint-config",
+    "flat-config",
+    "prettier",
+    "prettier-config",
+    "typescript",
+    "react",
+    "nextjs",
+    "vue",
+    "nuxt",
+    "angular"
+  ],
+  "homepage": "https://github.com/batuhan-bas/my-configs#readme",
+  "bugs": {
+    "url": "https://github.com/batuhan-bas/my-configs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/batuhan-bas/my-configs.git"
+  },
+  "license": "MIT",
+  "author": "Batuhan Baş (https://github.com/batuhan-bas)",
+  "type": "commonjs",
   "exports": {
     "./eslint": "./eslint.config.js",
     "./eslint/base": "./eslint/base.js",
     "./eslint/react": "./eslint/react.js",
     "./eslint/vue": "./eslint/vue.js",
     "./eslint/angular": "./eslint/angular.js",
-    "./prettier": "./prettier.config.js"
+    "./prettier": "./prettier.config.js",
+    "./package.json": "./package.json"
   },
-  "keywords": [],
-  "author": "batuhan-bas",
-  "license": "ISC",
+  "files": [
+    "eslint",
+    "eslint.config.js",
+    "prettier.config.js"
+  ],
+  "engines": {
+    "node": ">=18.18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "packageManager": "pnpm@10.27.0",
   "peerDependencies": {
-    "eslint": ">=9",
-    "prettier": ">=3",
-    "@typescript-eslint/eslint-plugin": ">=8",
-    "@typescript-eslint/parser": ">=8"
+    "@angular-eslint/eslint-plugin": ">=20",
+    "@angular-eslint/eslint-plugin-template": ">=20",
+    "@angular-eslint/template-parser": ">=20",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "eslint": "^9 || ^10",
+    "eslint-plugin-react": "^7.37",
+    "eslint-plugin-react-hooks": ">=5",
+    "eslint-plugin-vue": "^9.28 || ^10",
+    "prettier": "^3",
+    "vue-eslint-parser": "^9.4 || ^10"
   },
   "peerDependenciesMeta": {
+    "@angular-eslint/eslint-plugin": { "optional": true },
+    "@angular-eslint/eslint-plugin-template": { "optional": true },
+    "@angular-eslint/template-parser": { "optional": true },
     "eslint-plugin-react": { "optional": true },
     "eslint-plugin-react-hooks": { "optional": true },
     "eslint-plugin-vue": { "optional": true },
-    "vue-eslint-parser": { "optional": true },
-    "@angular-eslint/eslint-plugin": { "optional": true },
-    "@angular-eslint/eslint-plugin-template": { "optional": true },
-    "@angular-eslint/template-parser": { "optional": true }
+    "prettier": { "optional": true },
+    "vue-eslint-parser": { "optional": true }
   }
 }
