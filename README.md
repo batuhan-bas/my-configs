@@ -148,6 +148,19 @@ pnpm update @batuhan-bas/configs --latest
 
 Requirements: Node.js `>=18.18`, ESLint `9` or `10` (flat config).
 
+> The React preset needs ESLint 9 for now — `eslint-plugin-react` 7.x does not support ESLint 10 yet.
+
+## Development
+
+```bash
+pnpm install
+pnpm test
+```
+
+`pnpm test` lints the fixtures in `test/fixtures` with every preset. It fails when a config can't be
+loaded (unknown rule, invalid options, parser error), when a preset stops reporting its expected
+rule, or when a rule conflicts with Prettier.
+
 ## Project-Specific Overrides
 
 You can override any rule on a per-project basis:

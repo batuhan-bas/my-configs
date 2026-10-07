@@ -226,7 +226,7 @@ const config = [
       "@angular-eslint/template/no-empty-control-flow": "warn",
 
       // Limit control flow condition complexity
-      "@angular-eslint/template/conditional-complexity": ["warn", 4],
+      "@angular-eslint/template/conditional-complexity": ["warn", { maxComplexity: 4 }],
 
       // Prefer Angular built-in pipes: date, uppercase, lowercase, etc.
       "@angular-eslint/template/prefer-built-in-pipes": "warn",
