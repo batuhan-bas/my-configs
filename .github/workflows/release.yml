@@ -9,28 +9,28 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
   pull-requests: write
-  id-token: write # npm provenance
+  id-token: write # npm Trusted Publishing (OIDC) + provenance
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      # Trusted Publishing needs npm >= 11.5.1 (pnpm publish hands off to the npm CLI)
+      - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
 
-      # Opens a "Version Packages" PR when changesets exist on main.
+      # Opens a "chore: version packages" PR when changesets exist on main.
       # Merging that PR bumps the version, updates CHANGELOG.md and publishes to npm.
+      # No npm token: authentication uses the Trusted Publisher configured on npmjs.com.
+      # Versions that already exist on npm are skipped.
       - uses: changesets/action@v1
-        # Skip until the NPM_TOKEN repository secret is configured
-        if: env.NPM_TOKEN != ''
         with:
           version: pnpm changeset version
           publish: pnpm release
@@ -38,5 +38,3 @@ jobs:
           commit: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
