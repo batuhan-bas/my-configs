@@ -1,5 +1,14 @@
 # @batuhan-bas/configs
 
+## 2.0.1
+
+### Patch Changes
+
+- 1c5f83a: Unused variables are now handled the same way in JavaScript and TypeScript files.
+
+  - JavaScript: `no-unused-vars` is a warning (was an error from `@eslint/js` recommended), like `@typescript-eslint/no-unused-vars` in TypeScript.
+  - Arguments and caught errors prefixed with `_` are ignored in both: `(value, _event) => value`, `catch (_error) {}`. Previously JavaScript reported both as errors and TypeScript reported `catch (_error)`.
+
 ## 2.0.0
 
 ### Major Changes
