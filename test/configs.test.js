@@ -1,21 +1,25 @@
-const { describe, it } = require("node:test");
-const assert = require("node:assert/strict");
-const path = require("node:path");
-const { ESLint } = require("eslint");
-const prettierCompat = require("eslint-config-prettier");
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import path from "node:path";
+import { ESLint } from "eslint";
+import prettier from "prettier";
+import prettierCompat from "eslint-config-prettier";
+import baseConfig from "../eslint/base.js";
+import reactConfig from "../eslint/react.js";
+import vueConfig from "../eslint/vue.js";
+import angularConfig, { createAngularConfig } from "../eslint/angular.js";
+import prettierEslintConfig from "../eslint/prettier.js";
+import { disableTypeChecked } from "../eslint/utils.js";
+import rootConfig from "../eslint.config.js";
+import prettierConfig from "../prettier.config.js";
 
-const fixturesDir = path.join(__dirname, "fixtures");
-const eslintMajor = Number(ESLint.version.split(".")[0]);
-
-const reactTodo =
-  // eslint-plugin-react 7.x still calls context.getFilename(), removed in ESLint 10
-  eslintMajor >= 10 && "eslint-plugin-react does not support ESLint 10 yet";
+const fixturesDir = path.join(import.meta.dirname, "fixtures");
 
 // [fixture file, rule that must be reported in it]
 const cases = [
   {
     name: "base",
-    config: require("../eslint/base"),
+    config: baseConfig,
     expected: [
       ["src/index.ts", "@typescript-eslint/no-floating-promises"],
       ["src/legacy.js", "no-var"],
@@ -23,16 +27,17 @@ const cases = [
   },
   {
     name: "react",
-    config: require("../eslint/react"),
-    todo: reactTodo,
+    config: reactConfig,
     expected: [
-      ["src/App.tsx", "react/jsx-key"],
-      ["src/List.jsx", "react/jsx-key"],
+      ["src/App.tsx", "@eslint-react/no-missing-key"],
+      ["src/List.jsx", "@eslint-react/no-missing-key"],
+      ["src/Counter.tsx", "react-hooks/rules-of-hooks"],
+      ["src/Missing.jsx", "no-undef"],
     ],
   },
   {
     name: "vue",
-    config: require("../eslint/vue"),
+    config: vueConfig,
     expected: [
       ["src/UserCard.vue", "vue/require-v-for-key"],
       ["src/SaveButton.vue", "@typescript-eslint/no-floating-promises"],
@@ -40,7 +45,7 @@ const cases = [
   },
   {
     name: "angular",
-    config: require("../eslint/angular"),
+    config: angularConfig,
     expected: [
       ["src/user-card.component.ts", "@angular-eslint/component-selector"],
       ["src/user-card.component.html", "@angular-eslint/template/eqeqeq"],
@@ -63,8 +68,8 @@ const lintFixture = async (fixture, config) => {
 };
 
 describe("eslint configs", () => {
-  for (const { name, config, expected, todo = false } of cases) {
-    it(`${name}: loads, parses every fixture file and reports the expected rules`, { todo }, async () => {
+  for (const { name, config, expected } of cases) {
+    it(`${name}: loads, parses every fixture file and reports the expected rules`, async () => {
       const results = await lintFixture(name, config);
 
       const fatal = results.flatMap(({ file, messages }) =>
@@ -82,7 +87,7 @@ describe("eslint configs", () => {
   }
 
   it("base: ignores build output", async () => {
-    const results = await lintFixture("base", require("../eslint/base"));
+    const results = await lintFixture("base", baseConfig);
     assert.deepEqual(
       results.filter(({ file }) => file.startsWith("dist")),
       [],
@@ -90,16 +95,15 @@ describe("eslint configs", () => {
   });
 
   it("base: lints tooling config files outside tsconfig without type information", async () => {
-    const results = await lintFixture("base", require("../eslint/base"));
+    const results = await lintFixture("base", baseConfig);
     const viteConfig = results.find(({ file }) => file === "vite.config.ts");
     assert.ok(viteConfig, "vite.config.ts was not linted");
     assert.deepEqual(viteConfig.messages, []);
   });
 
   it("utils: disableTypeChecked lints files outside tsconfig without type information", async () => {
-    const { disableTypeChecked } = require("../eslint/utils");
     const results = await lintFixture("tooling", [
-      ...require("../eslint/base"),
+      ...baseConfig,
       ...disableTypeChecked(["scripts/**"]),
     ]);
     const seed = results.find(({ file }) => file === path.join("scripts", "seed.ts"));
@@ -108,7 +112,6 @@ describe("eslint configs", () => {
   });
 
   it("angular: createAngularConfig applies a custom selector prefix", async () => {
-    const { createAngularConfig } = require("../eslint/angular");
     const results = await lintFixture("angular", createAngularConfig({ prefix: ["app", "user"] }));
     const selectorWarnings = results
       .flatMap(({ messages }) => messages)
@@ -117,7 +120,7 @@ describe("eslint configs", () => {
   });
 
   it("eslint.config.js re-exports the base config", () => {
-    assert.equal(require("../eslint.config"), require("../eslint/base"));
+    assert.equal(rootConfig, baseConfig);
   });
 });
 
@@ -156,24 +159,23 @@ describe("prettier compatibility", () => {
   }
 
   it("special rules use Prettier-compatible options", async () => {
-    const baseRules = await resolvedRules("base", require("../eslint/base"), "src/index.ts");
+    const baseRules = await resolvedRules("base", baseConfig, "src/index.ts");
     assert.deepEqual(baseRules.curly, [2, "all"]);
 
-    const vueRules = await resolvedRules("vue", require("../eslint/vue"), "src/UserCard.vue");
+    const vueRules = await resolvedRules("vue", vueConfig, "src/UserCard.vue");
     assert.equal(vueRules["vue/html-self-closing"][1].html.void, "any");
   });
 
   it("eslint/prettier is exported and keeps special rules untouched", () => {
-    const [prettierBlock] = require("../eslint/prettier");
+    const [prettierBlock] = prettierEslintConfig;
     assert.equal(prettierBlock.rules.curly, undefined);
     assert.equal(prettierBlock.rules["vue/html-self-closing"], undefined);
     assert.equal(prettierBlock.rules.indent, "off");
   });
 
   it("prettier config is valid", async () => {
-    const prettier = require("prettier");
     const formatted = await prettier.format("const a = {b:1}", {
-      ...require("../prettier.config"),
+      ...prettierConfig,
       parser: "typescript",
     });
     assert.equal(formatted, "const a = { b: 1 };\n");

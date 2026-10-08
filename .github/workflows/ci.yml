@@ -10,16 +10,12 @@ permissions:
 
 jobs:
   test:
-    name: Node ${{ matrix.node }} / ESLint ${{ matrix.eslint }}
+    name: Node ${{ matrix.node }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22, 24]
-        eslint: [9]
-        include:
-          - node: 22
-            eslint: 10
+        node: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -28,9 +24,6 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Use ESLint ${{ matrix.eslint }}
-        if: matrix.eslint != 9
-        run: pnpm add -D eslint@^${{ matrix.eslint }} @eslint/js@^${{ matrix.eslint }}
       - run: pnpm test
       - name: Check published files
         run: npm pack --dry-run

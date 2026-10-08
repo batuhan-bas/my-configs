@@ -1,7 +1,7 @@
-const baseConfig = require("./base");
-const prettierConfig = require("./prettier");
-const reactPlugin = require("eslint-plugin-react");
-const reactHooksPlugin = require("eslint-plugin-react-hooks");
+import baseConfig from "./base.js";
+import prettierConfig from "./prettier.js";
+import reactPlugin from "@eslint-react/eslint-plugin";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
 
 /** @type {import("eslint").Linter.Config[]} */
 const config = [
@@ -17,18 +17,18 @@ const config = [
       },
     },
     plugins: {
-      react: reactPlugin,
+      "@eslint-react": reactPlugin,
       "react-hooks": reactHooksPlugin,
     },
     settings: {
-      react: {
+      "react-x": {
         version: "detect",
       },
     },
     rules: {
 
       // ================================================================
-      // HOOKS — React Hooks rules
+      // HOOKS — React Hooks rules (official eslint-plugin-react-hooks)
       // ================================================================
 
       // Hooks must only be called at the top level of function components or custom hooks
@@ -41,125 +41,98 @@ const config = [
 
 
       // ================================================================
-      // JSX — JSX syntax rules
+      // JSX — JSX rules
+      // Duplicate props and undefined components are reported by TypeScript
       // ================================================================
 
-      // React 17+ — import React from 'react' is no longer required (JSX transform)
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-uses-react": "off",
-
       // Require key prop for every element in a list — critical for React reconciliation
-      "react/jsx-key": "error",
+      "@eslint-react/no-missing-key": "error",
 
-      // Disallow duplicate props in JSX: <Foo bar={1} bar={2} />
-      "react/jsx-no-duplicate-props": "error",
+      // Disallow duplicate keys among siblings: two items with key="a"
+      "@eslint-react/no-duplicate-key": "error",
 
-      // Catch undefined variables used in JSX
-      "react/jsx-no-undef": "error",
-
-      // target="_blank" security risk — disallow without rel="noreferrer"
-      "react/jsx-no-target-blank": "error",
+      // target="_blank" security risk — disallow without rel="noreferrer noopener"
+      "@eslint-react/dom-no-unsafe-target-blank": "error",
 
       // Catch comments accidentally rendered as text nodes
       // {/* correct */} vs /* incorrect */
-      "react/jsx-no-comment-textnodes": "warn",
-
-      // Component names must be PascalCase: <MyComponent /> correct, <myComponent /> incorrect
-      "react/jsx-pascal-case": "warn",
-
-      // Enforce self-closing for components without children: <Foo /> correct, <Foo></Foo> incorrect
-      "react/self-closing-comp": "warn",
+      "@eslint-react/jsx-no-comment-textnodes": "warn",
 
       // Catch unnecessary JSX fragments: <>{child}</> should just be {child}
-      "react/jsx-no-useless-fragment": "warn",
-
-      // Disallow unnecessary JSX expressions for strings: foo="bar" correct, foo={"bar"} incorrect
-      "react/jsx-curly-brace-presence": ["warn", { props: "never", children: "never" }],
-
-      // Use shorthand for boolean props: <Foo disabled /> correct, <Foo disabled={true} /> unnecessary
-      "react/jsx-boolean-value": ["warn", "never"],
-
-      // Use JSX fragment shorthand: <></> instead of <React.Fragment></React.Fragment>
-      "react/jsx-fragments": ["warn", "syntax"],
-
-      // Warn against .bind() or arrow functions in JSX props — creates new reference every render
-      "react/jsx-no-bind": ["warn", {
-        allowArrowFunctions: true,    // arrow functions are generally acceptable
-        allowBind: false,             // .bind() is forbidden
-        allowFunctions: false,
-      }],
+      "@eslint-react/jsx-no-useless-fragment": "warn",
 
       // Disallow javascript: URLs in JSX — XSS risk
-      "react/jsx-no-script-url": "error",
+      "@eslint-react/dom-no-script-url": "error",
 
       // Catch falsy render leaks like {0 && <Foo />} — 0 will be visible on screen
-      "react/jsx-no-leaked-render": "warn",
+      "@eslint-react/no-leaked-conditional-rendering": "warn",
 
       // Warn against creating new objects in context providers every render — unnecessary re-renders
-      "react/jsx-no-constructed-context-values": "warn",
+      "@eslint-react/no-unstable-context-value": "warn",
 
 
       // ================================================================
       // COMPONENT — Component authoring rules
+      // We use TypeScript, so prop-types rules are not needed
       // ================================================================
 
-      // We use TypeScript, prop-types is unnecessary
-      "react/prop-types": "off",
-
       // Suggest displayName for components — useful for debugging in DevTools
-      "react/display-name": "warn",
+      "@eslint-react/no-missing-component-display-name": "warn",
 
       // dangerouslySetInnerHTML and children cannot be used together
-      "react/no-danger-with-children": "error",
-
-      // Warn about deprecated React APIs (componentWillMount, etc.)
-      "react/no-deprecated": "warn",
+      "@eslint-react/dom-no-dangerously-set-innerhtml-with-children": "error",
 
       // Disallow direct state mutation: use setState instead of this.state.foo = bar
-      "react/no-direct-mutation-state": "error",
-
-      // Disallow string refs: use useRef or createRef instead of ref="myRef"
-      "react/no-string-refs": "error",
+      "@eslint-react/no-direct-mutation-state": "error",
 
       // Disallow findDOMNode — use ref instead
-      "react/no-find-dom-node": "warn",
-
-      // Catch unescaped HTML characters: use &gt; or {'>'} instead of >
-      "react/no-unescaped-entities": "warn",
+      "@eslint-react/dom-no-find-dom-node": "warn",
 
       // Catch unknown DOM properties: use className instead of class, htmlFor instead of for
-      "react/no-unknown-property": "error",
+      "@eslint-react/dom-no-unknown-property": "error",
 
       // Disallow defining components inside render() or function component body
       // A new component on every render = state loss
-      "react/no-unstable-nested-components": "warn",
+      "@eslint-react/no-nested-component-definitions": "warn",
 
       // Warn against using array index as key — causes bugs when order changes
-      "react/no-array-index-key": "warn",
+      "@eslint-react/no-array-index-key": "warn",
 
       // Warn about dangerouslySetInnerHTML usage — XSS risk
-      "react/no-danger": "warn",
+      "@eslint-react/dom-no-dangerously-set-innerhtml": "warn",
 
       // Enforce consistent naming in hook state destructuring: const [foo, setFoo] = useState()
-      "react/hook-use-state": "warn",
+      "@eslint-react/use-state": "warn",
 
       // Require sandbox attribute on iframes — security
-      "react/iframe-missing-sandbox": "warn",
+      "@eslint-react/dom-no-missing-iframe-sandbox": "warn",
 
       // Disallow passing children to void elements (br, hr, img)
-      "react/void-dom-elements-no-children": "error",
+      "@eslint-react/dom-no-void-elements-with-children": "error",
 
       // style prop must be an object: style="color:red" wrong, style={{ color: 'red' }} correct
-      "react/style-prop-object": "error",
+      "@eslint-react/dom-no-string-style-prop": "error",
 
-      // Require ref parameter in components using forwardRef
-      "react/forward-ref-uses-ref": "warn",
+      // Require type attribute on <button>: "button", "submit", or "reset"
+      "@eslint-react/dom-no-missing-button-type": "warn",
 
-      // Enforce function component definition style — prefer arrow functions
-      "react/function-component-definition": ["warn", {
-        namedComponents: "arrow-function",
-        unnamedComponents: "arrow-function",
-      }],
+
+      // ================================================================
+      // DEPRECATED APIs — Removed or deprecated in React 18/19
+      // ================================================================
+
+      // ReactDOM.render / hydrate → createRoot / hydrateRoot
+      "@eslint-react/dom-no-render": "warn",
+      "@eslint-react/dom-no-hydrate": "warn",
+      "@eslint-react/dom-no-render-return-value": "error",
+
+      // Legacy lifecycle methods (componentWillMount, etc.)
+      "@eslint-react/no-component-will-mount": "warn",
+      "@eslint-react/no-component-will-receive-props": "warn",
+      "@eslint-react/no-component-will-update": "warn",
+      "@eslint-react/no-unsafe-component-will-mount": "warn",
+      "@eslint-react/no-unsafe-component-will-receive-props": "warn",
+      "@eslint-react/no-unsafe-component-will-update": "warn",
     },
   },
 
@@ -167,4 +140,4 @@ const config = [
   ...prettierConfig,
 ];
 
-module.exports = config;
+export default config;
