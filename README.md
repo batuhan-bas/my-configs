@@ -31,6 +31,11 @@ npm install -D @batuhan-bas/configs
 
 Requirements: Node.js `>=22.13`, ESLint `10` (flat config). The package is ESM-only.
 
+> **TypeScript 7:** typescript-eslint supports TypeScript `<6.1` — TypeScript 7 has no compiler API
+> yet ([typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940)).
+> Projects on TypeScript 7 can keep TypeScript 6 installed for linting alongside it, see
+> [running side by side with TypeScript 6.0](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/#running-side-by-side-with-typescript-6.0).
+
 Add peer dependencies based on your framework:
 
 | Framework | Additional Dependencies |
@@ -223,10 +228,15 @@ pnpm update @batuhan-bas/configs --latest
 
 ## Development
 
+Requires Node.js `>=22.13` and pnpm 12 (pinned in `packageManager`).
+
 ```bash
 pnpm install
 pnpm test
 ```
+
+pnpm 12 refuses dependency versions published less than a day ago (`minimumReleaseAge`), as a
+supply-chain protection. A freshly released dependency can be installed the next day.
 
 `pnpm test` lints the fixtures in `test/fixtures` with every preset. It fails when a config can't be
 loaded (unknown rule, invalid options, parser error), when a preset stops reporting its expected
