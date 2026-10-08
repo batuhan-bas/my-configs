@@ -53,8 +53,7 @@
   "packageManager": "pnpm@10.27.0",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "changeset": "changeset",
-    "release": "pnpm test && changeset publish"
+    "changeset": "changeset"
   },
   "peerDependencies": {
     "@angular-eslint/eslint-plugin": ">=20",
