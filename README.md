@@ -264,7 +264,15 @@ Versions and `CHANGELOG.md` are managed with [Changesets](https://github.com/cha
    `error` rules or anything else that can break a consumer's lint run.
 
 2. After merging to `main`, the Release workflow opens a "chore: version packages" PR.
-3. Merging that PR bumps the version, updates the changelog and publishes to npm with provenance.
+3. Merging that PR runs the tests, publishes to npm with provenance, pushes the `vX.Y.Z` tag and
+   creates the GitHub release.
+
+The Release workflow ([`changesets/action`](https://github.com/changesets/action) v2) is split into
+jobs with minimal permissions: `select-mode` → `version` (opens the PR) or `pack` (tests + tarball,
+read-only) → `publish` (the only job allowed to publish to npm; runs no project scripts).
+
+Repository setting required: **Settings → Actions → General → Allow GitHub Actions to create and
+approve pull requests**.
 
 Publishing uses [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OIDC) — no npm
 token is stored in the repository. The trusted publisher is configured on npmjs.com under
