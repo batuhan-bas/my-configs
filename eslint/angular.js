@@ -1,4 +1,5 @@
 const baseConfig = require("./base");
+const prettierConfig = require("./prettier");
 const angularPlugin = require("@angular-eslint/eslint-plugin");
 const angularTemplatePlugin = require("@angular-eslint/eslint-plugin-template");
 const angularTemplateParser = require("@angular-eslint/template-parser");
@@ -306,6 +307,9 @@ const createAngularConfig = ({ prefix = "app" } = {}) => [
       "@angular-eslint/template/table-scope": "warn",
     },
   },
+
+  // Must stay last: turns off rules that conflict with Prettier
+  ...prettierConfig,
 ];
 
 const config = createAngularConfig();

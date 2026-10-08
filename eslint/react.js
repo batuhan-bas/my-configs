@@ -1,4 +1,5 @@
 const baseConfig = require("./base");
+const prettierConfig = require("./prettier");
 const reactPlugin = require("eslint-plugin-react");
 const reactHooksPlugin = require("eslint-plugin-react-hooks");
 
@@ -161,6 +162,9 @@ const config = [
       }],
     },
   },
+
+  // Must stay last: turns off rules that conflict with Prettier
+  ...prettierConfig,
 ];
 
 module.exports = config;

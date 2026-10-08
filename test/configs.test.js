@@ -89,6 +89,24 @@ describe("eslint configs", () => {
     );
   });
 
+  it("base: lints tooling config files outside tsconfig without type information", async () => {
+    const results = await lintFixture("base", require("../eslint/base"));
+    const viteConfig = results.find(({ file }) => file === "vite.config.ts");
+    assert.ok(viteConfig, "vite.config.ts was not linted");
+    assert.deepEqual(viteConfig.messages, []);
+  });
+
+  it("utils: disableTypeChecked lints files outside tsconfig without type information", async () => {
+    const { disableTypeChecked } = require("../eslint/utils");
+    const results = await lintFixture("tooling", [
+      ...require("../eslint/base"),
+      ...disableTypeChecked(["scripts/**"]),
+    ]);
+    const seed = results.find(({ file }) => file === path.join("scripts", "seed.ts"));
+    assert.ok(seed, "scripts/seed.ts was not linted");
+    assert.deepEqual(seed.messages, []);
+  });
+
   it("angular: createAngularConfig applies a custom selector prefix", async () => {
     const { createAngularConfig } = require("../eslint/angular");
     const results = await lintFixture("angular", createAngularConfig({ prefix: ["app", "user"] }));
@@ -105,29 +123,52 @@ describe("eslint configs", () => {
 
 describe("prettier compatibility", () => {
   // eslint-config-prettier marks plain conflicting rules as "off" and
-  // "special" rules (usable with care, e.g. curly: all) as 0.
+  // "special" rules (usable with the right options, e.g. curly: all) as 0.
   const conflictingRules = new Set(
     Object.entries(prettierCompat.rules)
       .filter(([, value]) => value === "off")
       .map(([rule]) => rule),
   );
 
-  const isEnabled = (entry) => {
-    const severity = Array.isArray(entry) ? entry[0] : entry;
-    return severity !== "off" && severity !== 0;
+  // Rules resolved by ESLint for one file: { ruleId: [severity, ...options] }
+  const resolvedRules = async (fixture, config, file) => {
+    const eslint = new ESLint({
+      cwd: path.join(fixturesDir, fixture),
+      overrideConfigFile: true,
+      overrideConfig: config,
+    });
+    const { rules } = await eslint.calculateConfigForFile(file);
+    return rules;
   };
 
-  for (const name of ["base", "react", "vue", "angular"]) {
-    it(`${name}: enables no rule that conflicts with Prettier`, () => {
-      const configs = require(`../eslint/${name}`);
-      const conflicts = configs
-        .flatMap((entry) => Object.entries(entry.rules ?? {}))
-        .filter(([rule, value]) => conflictingRules.has(rule) && isEnabled(value))
-        .map(([rule]) => rule);
+  for (const { name, config, expected } of cases) {
+    it(`${name}: no rule that conflicts with Prettier is enabled in the final config`, async () => {
+      assert.equal(config.at(-1).name, "batuhan-bas/prettier", "Prettier block must be last");
 
-      assert.deepEqual(conflicts, []);
+      for (const [file] of expected) {
+        const rules = await resolvedRules(name, config, file);
+        const conflicts = Object.entries(rules)
+          .filter(([rule, [severity]]) => conflictingRules.has(rule) && severity !== 0)
+          .map(([rule]) => rule);
+        assert.deepEqual(conflicts, [], file);
+      }
     });
   }
+
+  it("special rules use Prettier-compatible options", async () => {
+    const baseRules = await resolvedRules("base", require("../eslint/base"), "src/index.ts");
+    assert.deepEqual(baseRules.curly, [2, "all"]);
+
+    const vueRules = await resolvedRules("vue", require("../eslint/vue"), "src/UserCard.vue");
+    assert.equal(vueRules["vue/html-self-closing"][1].html.void, "any");
+  });
+
+  it("eslint/prettier is exported and keeps special rules untouched", () => {
+    const [prettierBlock] = require("../eslint/prettier");
+    assert.equal(prettierBlock.rules.curly, undefined);
+    assert.equal(prettierBlock.rules["vue/html-self-closing"], undefined);
+    assert.equal(prettierBlock.rules.indent, "off");
+  });
 
   it("prettier config is valid", async () => {
     const prettier = require("prettier");

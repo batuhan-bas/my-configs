@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      eslint-config-prettier:
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.39.5)
       globals:
         specifier: ^17.13.0
         version: 17.13.0
@@ -36,9 +39,6 @@ importers:
       eslint:
         specifier: ^9.39.5
         version: 9.39.5
-      eslint-config-prettier:
-        specifier: ^10.1.8
-        version: 10.1.8(eslint@9.39.5)
       eslint-plugin-react:
         specifier: ^7.37.5
         version: 7.37.5(eslint@9.39.5)

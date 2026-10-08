@@ -1,5 +1,6 @@
 const js = require("@eslint/js");
 const baseConfig = require("./base");
+const prettierConfig = require("./prettier");
 const vuePlugin = require("eslint-plugin-vue");
 const vueParser = require("vue-eslint-parser");
 const tseslint = require("@typescript-eslint/eslint-plugin");
@@ -330,11 +331,15 @@ const config = [
       "vue/html-button-has-type": "warn",
 
       // Self-closing: <MyComp /> correct, <MyComp></MyComp> unnecessary
+      // void: "any" — Prettier decides how void elements (<img>, <br>) are written
       "vue/html-self-closing": ["warn", {
-        html: { void: "always", normal: "never", component: "always" },
+        html: { void: "any", normal: "never", component: "always" },
       }],
     },
   },
+
+  // Must stay last: turns off rules that conflict with Prettier
+  ...prettierConfig,
 ];
 
 module.exports = config;

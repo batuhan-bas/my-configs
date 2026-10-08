@@ -12,6 +12,8 @@ my-configs/
 │   │   ├── core.js       ← core ESLint rules (JS + TS)
 │   │   └── typescript.js ← @typescript-eslint rules
 │   ├── base.js       ← ignores + JavaScript + TypeScript configs (shared across all frameworks)
+│   ├── prettier.js   ← turns off rules that conflict with Prettier (last in every preset)
+│   ├── utils.js      ← disableTypeChecked(files)
 │   ├── react.js      ← base + React/Next.js rules
 │   ├── vue.js        ← base + Vue/Nuxt rules
 │   └── angular.js    ← base + Angular rules
@@ -118,6 +120,19 @@ module.exports = [...sharedConfig];
 module.exports = require("@batuhan-bas/configs/prettier");
 ```
 
+ESLint and Prettier don't fight: every preset ends with
+[`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier), which turns off
+all ESLint rules that conflict with Prettier. If you add other plugins **after** the preset
+(e.g. `@stylistic`), put the Prettier block last again:
+
+```js
+module.exports = [
+  ...sharedConfig,
+  ...yourOtherPlugins,
+  ...require("@batuhan-bas/configs/eslint/prettier"),
+];
+```
+
 ## What Gets Linted
 
 | Files | Rules |
@@ -130,19 +145,19 @@ module.exports = require("@batuhan-bas/configs/prettier");
 Build output is ignored by default: `dist`, `build`, `out`, `coverage`, `.next`, `.nuxt`,
 `.output`, `.angular`, `.vercel`, `*.min.js`.
 
-TypeScript files that are not part of a `tsconfig.json` (e.g. `vite.config.ts` in some setups) need
-to be added to a tsconfig, or excluded with type-checked rules disabled:
+Tooling config files (`*.config.ts`, `*.config.mts`, `*.config.cts` — e.g. `vite.config.ts`) are
+linted **without type information**, because they are often not part of `tsconfig.json`.
+
+Other TypeScript files outside your `tsconfig.json` (scripts, tooling) fail with
+_"was not found by the project service"_. Add them to a tsconfig, or lint them without types:
 
 ```js
-const tseslint = require("@typescript-eslint/eslint-plugin");
+const sharedConfig = require("@batuhan-bas/configs/eslint/react");
+const { disableTypeChecked } = require("@batuhan-bas/configs/eslint/utils");
 
 module.exports = [
   ...sharedConfig,
-  {
-    files: ["*.config.ts"],
-    languageOptions: { parserOptions: { projectService: false } },
-    rules: tseslint.configs["disable-type-checked"].rules,
-  },
+  ...disableTypeChecked(["scripts/**"]),
 ];
 ```
 
