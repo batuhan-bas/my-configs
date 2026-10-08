@@ -1,11 +1,11 @@
-const js = require("@eslint/js");
-const globals = require("globals");
-const tseslint = require("@typescript-eslint/eslint-plugin");
-const tsparser = require("@typescript-eslint/parser");
-const coreRules = require("./rules/core");
-const typescriptRules = require("./rules/typescript");
-const { disableTypeChecked } = require("./utils");
-const prettierConfig = require("./prettier");
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import coreRules from "./rules/core.js";
+import typescriptRules from "./rules/typescript.js";
+import { disableTypeChecked } from "./utils.js";
+import prettierConfig from "./prettier.js";
 
 // Core rules that TypeScript already checks (no-undef, no-dupe-keys, etc.) — turned off for TS
 const typescriptOverrides = tseslint.configs["eslint-recommended"].overrides[0].rules;
@@ -95,4 +95,4 @@ const config = [
   ...prettierConfig,
 ];
 
-module.exports = config;
+export default config;

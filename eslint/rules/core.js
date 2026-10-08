@@ -121,4 +121,4 @@ const coreRules = {
   "prefer-template": "warn",
 };
 
-module.exports = coreRules;
+export default coreRules;

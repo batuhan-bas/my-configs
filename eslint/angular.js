@@ -1,15 +1,15 @@
-const baseConfig = require("./base");
-const prettierConfig = require("./prettier");
-const angularPlugin = require("@angular-eslint/eslint-plugin");
-const angularTemplatePlugin = require("@angular-eslint/eslint-plugin-template");
-const angularTemplateParser = require("@angular-eslint/template-parser");
+import baseConfig from "./base.js";
+import prettierConfig from "./prettier.js";
+import angularPlugin from "@angular-eslint/eslint-plugin";
+import angularTemplatePlugin from "@angular-eslint/eslint-plugin-template";
+import angularTemplateParser from "@angular-eslint/template-parser";
 
 /**
  * Creates the Angular config with a custom selector prefix.
  *
  * @example
- * const { createAngularConfig } = require("@batuhan-bas/configs/eslint/angular");
- * module.exports = createAngularConfig({ prefix: ["acme", "ui"] });
+ * import { createAngularConfig } from "@batuhan-bas/configs/eslint/angular";
+ * export default createAngularConfig({ prefix: ["acme", "ui"] });
  *
  * @param {{ prefix?: string | string[] }} [options]
  * @returns {import("eslint").Linter.Config[]}
@@ -314,5 +314,5 @@ const createAngularConfig = ({ prefix = "app" } = {}) => [
 
 const config = createAngularConfig();
 
-module.exports = config;
-module.exports.createAngularConfig = createAngularConfig;
+export default config;
+export { createAngularConfig };

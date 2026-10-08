@@ -1,7 +1,7 @@
 export const List = ({ items }) => (
   <ul>
     {items.map((item) => (
-      // Expected: react/jsx-key
+      // Expected: @eslint-react/no-missing-key
       <li>{item}</li>
     ))}
   </ul>

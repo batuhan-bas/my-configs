@@ -77,4 +77,4 @@ const config = {
   singleAttributePerLine: false,
 };
 
-module.exports = config;
+export default config;

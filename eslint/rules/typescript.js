@@ -131,4 +131,4 @@ const typescriptRules = {
   "@typescript-eslint/switch-exhaustiveness-check": "warn",
 };
 
-module.exports = typescriptRules;
+export default typescriptRules;

@@ -29,13 +29,15 @@ pnpm add -D @batuhan-bas/configs
 npm install -D @batuhan-bas/configs
 ```
 
+Requirements: Node.js `>=22.13`, ESLint `10` (flat config). The package is ESM-only.
+
 Add peer dependencies based on your framework:
 
 | Framework | Additional Dependencies |
 |-----------|------------------------|
 | All (required) | `eslint @eslint/js @typescript-eslint/eslint-plugin @typescript-eslint/parser` |
 | Prettier config | `prettier` |
-| React / Next.js | `eslint-plugin-react eslint-plugin-react-hooks` |
+| React / Next.js | `@eslint-react/eslint-plugin eslint-plugin-react-hooks` |
 | Vue / Nuxt | `eslint-plugin-vue vue-eslint-parser` |
 | Angular | `@angular-eslint/eslint-plugin @angular-eslint/eslint-plugin-template @angular-eslint/template-parser` |
 
@@ -46,9 +48,9 @@ Add peer dependencies based on your framework:
 `eslint.config.js`:
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/react");
+import sharedConfig from "@batuhan-bas/configs/eslint/react";
 
-module.exports = [
+export default [
   ...sharedConfig,
   {
     rules: {
@@ -63,9 +65,9 @@ module.exports = [
 `eslint.config.js`:
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/vue");
+import sharedConfig from "@batuhan-bas/configs/eslint/vue";
 
-module.exports = [
+export default [
   ...sharedConfig,
   {
     rules: {
@@ -80,9 +82,9 @@ module.exports = [
 `eslint.config.js`:
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/angular");
+import sharedConfig from "@batuhan-bas/configs/eslint/angular";
 
-module.exports = [
+export default [
   ...sharedConfig,
   {
     rules: {
@@ -95,9 +97,9 @@ module.exports = [
 To use a selector prefix other than `app`:
 
 ```js
-const { createAngularConfig } = require("@batuhan-bas/configs/eslint/angular");
+import { createAngularConfig } from "@batuhan-bas/configs/eslint/angular";
 
-module.exports = [
+export default [
   ...createAngularConfig({ prefix: ["acme", "ui"] }),
 ];
 ```
@@ -107,9 +109,9 @@ Inline templates (``template: `...` ``) are linted with the same template rules 
 ### TypeScript Only (no framework)
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/base");
+import sharedConfig from "@batuhan-bas/configs/eslint/base";
 
-module.exports = [...sharedConfig];
+export default [...sharedConfig];
 ```
 
 ### Prettier (same for all projects)
@@ -117,7 +119,7 @@ module.exports = [...sharedConfig];
 `prettier.config.js`:
 
 ```js
-module.exports = require("@batuhan-bas/configs/prettier");
+export { default } from "@batuhan-bas/configs/prettier";
 ```
 
 ESLint and Prettier don't fight: every preset ends with
@@ -126,10 +128,12 @@ all ESLint rules that conflict with Prettier. If you add other plugins **after**
 (e.g. `@stylistic`), put the Prettier block last again:
 
 ```js
-module.exports = [
+import prettier from "@batuhan-bas/configs/eslint/prettier";
+
+export default [
   ...sharedConfig,
   ...yourOtherPlugins,
-  ...require("@batuhan-bas/configs/eslint/prettier"),
+  ...prettier,
 ];
 ```
 
@@ -152,10 +156,10 @@ Other TypeScript files outside your `tsconfig.json` (scripts, tooling) fail with
 _"was not found by the project service"_. Add them to a tsconfig, or lint them without types:
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/react");
-const { disableTypeChecked } = require("@batuhan-bas/configs/eslint/utils");
+import sharedConfig from "@batuhan-bas/configs/eslint/react";
+import { disableTypeChecked } from "@batuhan-bas/configs/eslint/utils";
 
-module.exports = [
+export default [
   ...sharedConfig,
   ...disableTypeChecked(["scripts/**"]),
 ];
@@ -171,9 +175,12 @@ module.exports = [
 
 ### React / Next.js
 
+Uses [`@eslint-react`](https://eslint-react.xyz) and the official `eslint-plugin-react-hooks`.
+
 - Hooks: `rules-of-hooks`, `exhaustive-deps`
-- JSX: `jsx-key`, `jsx-no-leaked-render`, `jsx-no-target-blank`, `self-closing-comp`
-- Component: `no-unstable-nested-components`, `no-array-index-key`, `no-danger`
+- JSX: `no-missing-key`, `no-leaked-conditional-rendering`, `dom-no-unsafe-target-blank`
+- Component: `no-nested-component-definitions`, `no-array-index-key`, `dom-no-dangerously-set-innerhtml`
+- Deprecated APIs: `ReactDOM.render`, legacy lifecycle methods
 
 ### Vue / Nuxt
 
@@ -204,9 +211,15 @@ module.exports = [
 pnpm update @batuhan-bas/configs --latest
 ```
 
-Requirements: Node.js `>=18.18`, ESLint `9` or `10` (flat config).
+### Migrating from 1.x to 2.0
 
-> The React preset needs ESLint 9 for now — `eslint-plugin-react` 7.x does not support ESLint 10 yet.
+1. Update Node.js to `>=22.13` and ESLint + `@eslint/js` to `10`.
+2. Switch `eslint.config.js` to `import` / `export default` (examples above). In a CommonJS
+   config file, `require()` still works but returns the module namespace — use `.default`:
+   `require("@batuhan-bas/configs/eslint/react").default`.
+3. React: replace `eslint-plugin-react` with `@eslint-react/eslint-plugin` and rename overrides —
+   `react/jsx-key` → `@eslint-react/no-missing-key`, `react/no-danger` →
+   `@eslint-react/dom-no-dangerously-set-innerhtml`, etc. See `eslint/react.js` for the full list.
 
 ## Development
 
@@ -224,9 +237,9 @@ rule, or when a rule conflicts with Prettier.
 You can override any rule on a per-project basis:
 
 ```js
-const sharedConfig = require("@batuhan-bas/configs/eslint/react");
+import sharedConfig from "@batuhan-bas/configs/eslint/react";
 
-module.exports = [
+export default [
   ...sharedConfig,
   {
     rules: {

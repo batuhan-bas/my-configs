@@ -1,12 +1,12 @@
-const js = require("@eslint/js");
-const baseConfig = require("./base");
-const prettierConfig = require("./prettier");
-const vuePlugin = require("eslint-plugin-vue");
-const vueParser = require("vue-eslint-parser");
-const tseslint = require("@typescript-eslint/eslint-plugin");
-const tsparser = require("@typescript-eslint/parser");
-const coreRules = require("./rules/core");
-const typescriptRules = require("./rules/typescript");
+import js from "@eslint/js";
+import baseConfig from "./base.js";
+import prettierConfig from "./prettier.js";
+import vuePlugin from "eslint-plugin-vue";
+import vueParser from "vue-eslint-parser";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import coreRules from "./rules/core.js";
+import typescriptRules from "./rules/typescript.js";
 
 const typescriptOverrides = tseslint.configs["eslint-recommended"].overrides[0].rules;
 
@@ -342,4 +342,4 @@ const config = [
   ...prettierConfig,
 ];
 
-module.exports = config;
+export default config;

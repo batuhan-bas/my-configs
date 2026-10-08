@@ -1,4 +1,4 @@
-const tseslint = require("@typescript-eslint/eslint-plugin");
+import tseslint from "@typescript-eslint/eslint-plugin";
 
 const disableTypeCheckedConfig = tseslint.configs["disable-type-checked"];
 
@@ -8,8 +8,8 @@ const disableTypeCheckedConfig = tseslint.configs["disable-type-checked"];
  * otherwise the parser fails with "was not found by the project service".
  *
  * @example
- * const { disableTypeChecked } = require("@batuhan-bas/configs/eslint/utils");
- * module.exports = [...sharedConfig, ...disableTypeChecked(["scripts/**"])];
+ * import { disableTypeChecked } from "@batuhan-bas/configs/eslint/utils";
+ * export default [...sharedConfig, ...disableTypeChecked(["scripts/**"])];
  *
  * @param {string[]} files Glob patterns
  * @returns {import("eslint").Linter.Config[]}
@@ -25,4 +25,4 @@ const disableTypeChecked = (files) => [
   },
 ];
 
-module.exports = { disableTypeChecked };
+export { disableTypeChecked };
