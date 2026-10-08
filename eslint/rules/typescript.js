@@ -1,5 +1,7 @@
 // TypeScript rules shared by .ts/.tsx files and <script lang="ts"> blocks in .vue files.
 
+import { unusedVarsOptions } from "./core.js";
+
 /** @type {import("eslint").Linter.RulesRecord} */
 const typescriptRules = {
   // ================================================================
@@ -30,8 +32,8 @@ const typescriptRules = {
 
   // --- no-unused-vars ---
   "no-unused-vars": "off",
-  // Warn about unused variables — variables prefixed with _ are exempt
-  "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+  // Warn about unused variables — arguments and caught errors prefixed with _ are exempt
+  "@typescript-eslint/no-unused-vars": ["warn", unusedVarsOptions],
 
   // --- no-use-before-define ---
   "no-use-before-define": "off",

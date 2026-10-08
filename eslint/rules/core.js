@@ -1,6 +1,13 @@
 // Core ESLint rules shared by JavaScript and TypeScript files.
 // Applied on top of @eslint/js "recommended".
 
+// Shared by no-unused-vars (JS) and @typescript-eslint/no-unused-vars (TS):
+// a leading _ marks an intentionally unused argument or caught error — (_event) / catch (_error)
+export const unusedVarsOptions = {
+  argsIgnorePattern: "^_",
+  caughtErrorsIgnorePattern: "^_",
+};
+
 /** @type {import("eslint").Linter.RulesRecord} */
 const coreRules = {
   // ================================================================
@@ -36,6 +43,9 @@ const coreRules = {
 
   // Catch unreachable code after return/throw/break
   "no-unreachable": "error",
+
+  // Warn about unused variables — arguments and caught errors prefixed with _ are exempt
+  "no-unused-vars": ["warn", unusedVarsOptions],
 
   // Warn about assignments that could cause race conditions in async functions
   "require-atomic-updates": "warn",

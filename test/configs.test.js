@@ -94,6 +94,21 @@ describe("eslint configs", () => {
     );
   });
 
+  it("base: unused variables are handled the same way in JS and TS", async () => {
+    const results = await lintFixture("base", baseConfig);
+    const unusedReports = (file) =>
+      results
+        .find((r) => r.file === file)
+        .messages.filter((m) => m.ruleId?.endsWith("no-unused-vars"))
+        .map((m) => ({ line: m.line, severity: m.severity }));
+
+    // Only the real unused variable (line 14) is reported, as a warning;
+    // _event and _error are exempt
+    const expected = [{ line: 14, severity: 1 }];
+    assert.deepEqual(unusedReports(path.join("src", "unused.js")), expected);
+    assert.deepEqual(unusedReports(path.join("src", "unused.ts")), expected);
+  });
+
   it("base: lints tooling config files outside tsconfig without type information", async () => {
     const results = await lintFixture("base", baseConfig);
     const viteConfig = results.find(({ file }) => file === "vite.config.ts");
