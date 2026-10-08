@@ -97,8 +97,7 @@ jobs:
         with:
           node-version: 24
           package-manager-cache: false
-      # Trusted Publishing needs npm >= 11.5.1
-      - run: npm install -g npm@latest
+      # pnpm >= 11 publishes natively with OIDC (Trusted Publishing) — no npm CLI needed
       - run: pnpm install --frozen-lockfile
       - uses: changesets/action/publish@v2
         with:
