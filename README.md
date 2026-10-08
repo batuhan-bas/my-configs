@@ -253,7 +253,10 @@ Versions and `CHANGELOG.md` are managed with [Changesets](https://github.com/cha
 2. After merging to `main`, the Release workflow opens a "chore: version packages" PR.
 3. Merging that PR bumps the version, updates the changelog and publishes to npm with provenance.
 
-The workflow needs an `NPM_TOKEN` repository secret (npm granular access token with publish rights).
+Publishing uses [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OIDC) — no npm
+token is stored in the repository. The trusted publisher is configured on npmjs.com under
+**Package settings → Trusted Publisher**: GitHub Actions, repository `batuhan-bas/my-configs`,
+workflow `release.yml`.
 
 ## License
 
